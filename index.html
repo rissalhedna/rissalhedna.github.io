@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mohamed Rissal Hedna - AI Engineer</title>
+    <title>Mohamed Rissal Hedna - AI Engineer & Researcher</title>
     <style>
         /* Minimalist "Academic" Design */
         :root {
@@ -17,7 +17,7 @@
             font-family: var(--font-main);
             line-height: 1.6;
             color: var(--text-primary);
-            max-width: 850px; /* Slightly wider to accommodate bigger image */
+            max-width: 850px;
             margin: 0 auto;
             padding: 40px 20px;
         }
@@ -26,19 +26,19 @@
         header {
             display: flex;
             justify-content: space-between;
-            align-items: flex-start;
+            align-items: flex-start; /* Aligns top of text with top of image */
             margin-bottom: 50px;
         }
         .header-content {
-            max-width: 65%; /* Adjusted for bigger image */
+            max-width: 65%;
         }
         .profile-img {
-            width: 230px;        /* BIGGER */
-            height: 230px;       /* BIGGER */
-            border-radius: 4px;  /* SQUARE (with tiny polish) */
+            width: 230px;
+            height: 230px;
+            border-radius: 4px; /* Square with slight rounding */
             object-fit: cover;
             margin-left: 20px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            display: block;
         }
 
         /* Responsive Design for Mobile */
@@ -54,14 +54,35 @@
             .profile-img {
                 margin-bottom: 25px;
                 margin-left: 0;
-                width: 200px; /* Slightly smaller on mobile */
+                width: 200px;
                 height: 200px;
             }
         }
 
-        h1 { font-size: 2.2rem; margin-bottom: 5px; letter-spacing: -0.5px; color: #111; line-height: 1.2; }
-        h2 { font-size: 1.1rem; border-bottom: 1px solid #e0e0e0; padding-bottom: 8px; margin-top: 40px; text-transform: uppercase; letter-spacing: 0.5px; color: #333; }
-        h3 { font-size: 1.05rem; margin-bottom: 2px; margin-top: 20px; font-weight: 600; }
+        /* TYPOGRAPHY */
+        h1 { 
+            font-size: 2.2rem; 
+            margin-top: 0; /* CRITICAL: Forces text to align with top of image */
+            margin-bottom: 5px; 
+            letter-spacing: -0.5px; 
+            color: #111; 
+            line-height: 1.1; 
+        }
+        h2 { 
+            font-size: 1.1rem; 
+            border-bottom: 1px solid #e0e0e0; 
+            padding-bottom: 8px; 
+            margin-top: 40px; 
+            text-transform: uppercase; 
+            letter-spacing: 0.5px; 
+            color: #333; 
+        }
+        h3 { 
+            font-size: 1.05rem; 
+            margin-bottom: 2px; 
+            margin-top: 20px; 
+            font-weight: 600; 
+        }
         .subtitle { color: var(--text-secondary); font-size: 1.1rem; margin-bottom: 20px; }
         
         a { color: var(--accent-color); text-decoration: none; }
@@ -109,8 +130,8 @@
             </div>
             <p style="color: #444;">
                 I bridge the gap between state-of-the-art research and hardware-aware implementation. 
-                [cite_start]Currently a Master's student at the University of Hamburg, focusing on <strong>Unsupervised Self-Calibration in Language Models</strong>[cite: 59, 156].
-                [cite_start]Previously engineered efficient pipelines for Pharos Labs and AdaLab, scaling systems to 100k+ users[cite: 173, 183].
+                Currently a Master's student at the University of Hamburg, focusing on <strong>Unsupervised Self-Calibration in Language Models</strong>.
+                Previously engineered efficient pipelines for Pharos Labs and AdaLab, scaling systems to 100k+ users.
             </p>
             <div class="header-links">
                 <a href="mailto:rissalhedna@gmail.com">rissalhedna@gmail.com</a>
@@ -132,9 +153,9 @@
                 <span class="date">Jan 2024 – Present</span>
             </div>
             <ul>
-                [cite_start]<li>Engineered a high-throughput data pipeline, performing memory profiling to reduce end-to-end latency by <strong>20%</strong>[cite: 15].</li>
-                [cite_start]<li>Designed automated evaluation workflows for multi-agent reasoning systems, including reliability checks and failure case analysis[cite: 17].</li>
-                [cite_start]<li>Delivered production-grade features driving a 25% increase in user adoption[cite: 16].</li>
+                <li>Engineered a high-throughput data pipeline, performing memory profiling to reduce end-to-end latency by <strong>20%</strong>.</li>
+                <li>Designed automated evaluation workflows for multi-agent reasoning systems, including reliability checks and failure case analysis.</li>
+                <li>Delivered production-grade features driving a 25% increase in user adoption.</li>
             </ul>
         </div>
 
@@ -144,9 +165,9 @@
                 <span class="date">Oct 2025 – Jan 2026</span>
             </div>
             <ul>
-                [cite_start]<li>Architected an end-to-end generative content engine that transforms raw financial datasets into short-form video content[cite: 20].</li>
-                [cite_start]<li>Led the engineering of a multimodal system (Text-to-Video/Audio), automating the full production lifecycle[cite: 21].</li>
-                [cite_start]<li>Designed retrieval architecture for complex financial queries ensuring data consistency[cite: 22].</li>
+                <li>Architected an end-to-end generative content engine that transforms raw financial datasets into short-form video content.</li>
+                <li>Led the engineering of a multimodal system (Text-to-Video/Audio), automating the full production lifecycle.</li>
+                <li>Designed retrieval architecture for complex financial queries ensuring data consistency.</li>
             </ul>
         </div>
 
@@ -156,9 +177,9 @@
                 <span class="date">Jan 2023 – Jan 2024</span>
             </div>
             <ul>
-                [cite_start]<li>Scaled a multimodal AI platform (<a href="https://www.plazmapunk.com" target="_blank">PlazmaPunk</a>) to <strong>100,000+ users</strong>[cite: 331].</li>
-                [cite_start]<li>Reduced pipeline latency by <strong>78%</strong> by researching and testing efficient vision-language architectures[cite: 332].</li>
-                [cite_start]<li>Implemented parallel execution strategies to resolve critical high-load bottlenecks[cite: 25].</li>
+                <li>Scaled a multimodal AI platform (<a href="https://www.plazmapunk.com" target="_blank">PlazmaPunk</a>) to <strong>100,000+ users</strong>.</li>
+                <li>Reduced pipeline latency by <strong>78%</strong> by researching and testing efficient vision-language architectures.</li>
+                <li>Implemented parallel execution strategies to resolve critical high-load bottlenecks.</li>
             </ul>
         </div>
 
@@ -168,8 +189,8 @@
                 <span class="date">2022</span>
             </div>
             <ul>
-                [cite_start]<li>Engineered a custom C/Python CNN architecture achieving <strong>&lt;50ms inference latency</strong> on embedded NVIDIA Jetson hardware[cite: 56].</li>
-                [cite_start]<li>Optimized real-time obstacle detection in GPS-denied environments[cite: 56].</li>
+                <li>Engineered a custom C/Python CNN architecture achieving <strong>&lt;50ms inference latency</strong> on embedded NVIDIA Jetson hardware.</li>
+                <li>Optimized real-time obstacle detection in GPS-denied environments.</li>
             </ul>
         </div>
     </section>
@@ -181,10 +202,10 @@
             <div class="role-header">
                 <h3>Lightweight Transformer Optimization (T5-Efficient)</h3>
             </div>
-            [cite_start]<p style="font-size: 0.95rem; color: #444; margin: 5px 0;">Engineered a custom "T5-Efficient" Transformer for resource-constrained devices[cite: 29].</p>
+            <p style="font-size: 0.95rem; color: #444; margin: 5px 0;">Engineered a custom "T5-Efficient" Transformer for resource-constrained devices.</p>
             <ul>
-                [cite_start]<li>Slashed parameter count by <strong>81%</strong> (17.7M to 3.3M) by optimizing layer distribution[cite: 29].</li>
-                [cite_start]<li>Orchestrated training in PyTorch using BF16 mixed-precision, converging in under 12 hours on single-GPU infrastructure[cite: 30].</li>
+                <li>Slashed parameter count by <strong>81%</strong> (17.7M to 3.3M) by optimizing layer distribution.</li>
+                <li>Orchestrated training in PyTorch using BF16 mixed-precision, converging in under 12 hours on single-GPU infrastructure.</li>
             </ul>
             <div class="tags-container">
                 <span class="tag">PyTorch</span>
@@ -198,8 +219,8 @@
                 <h3>UniLLM: RAG-based Assistant</h3>
             </div>
             <ul>
-                [cite_start]<li>Architected a retrieval-augmented generation system using LlamaIndex and Qdrant[cite: 32].</li>
-                [cite_start]<li>Optimized retrieval chunks to achieve a <strong>13% reduction</strong> in query resolution time[cite: 32].</li>
+                <li>Architected a retrieval-augmented generation system using LlamaIndex and Qdrant.</li>
+                <li>Optimized retrieval chunks to achieve a <strong>13% reduction</strong> in query resolution time.</li>
             </ul>
             <div class="tags-container">
                 <span class="tag">RAG</span>
@@ -214,17 +235,17 @@
 
         <div class="paper-item">
             <div class="paper-title">SERL: SElf-Reflecting Language Models</div>
-            <div class="paper-venue">M. Rissal Hedna, Chris Biemann. [cite_start]Manuscript in Preparation (Targeting ACL/EMNLP 2025)[cite: 36].</div>
+            <div class="paper-venue">M. Rissal Hedna, Chris Biemann. Manuscript in Preparation (Targeting ACL/EMNLP 2025).</div>
         </div>
 
         <div class="paper-item">
             <div class="paper-title">Simulated Adversarial Patch Attacks on Vision-Based Logistics Systems</div>
-            <div class="paper-venue">Sesugh Nder, M. Rissal Hedna. [cite_start]Technical Report, University of Hamburg, 2024. arXiv:2511.19254[cite: 40].</div>
+            <div class="paper-venue">Sesugh Nder, M. Rissal Hedna. Technical Report, University of Hamburg, 2024. arXiv:2511.19254.</div>
         </div>
 
         <div class="paper-item">
             <div class="paper-title">A Model for the Automatic Mixing of Multiple Video and Audio Clips</div>
-            <div class="paper-venue">M. Rissal Hedna, et al. [cite_start]Proceedings of the 2023 International Conference on Cyberworlds (CW)[cite: 38].</div>
+            <div class="paper-venue">M. Rissal Hedna, et al. Proceedings of the 2023 International Conference on Cyberworlds (CW).</div>
         </div>
     </section>
 
