@@ -21,22 +21,58 @@
             margin: 0 auto;
             padding: 40px 20px;
         }
-        h1 { font-size: 2.2rem; margin-bottom: 5px; letter-spacing: -0.5px; color: #111; }
+
+        /* HEADER & PROFILE PIC LAYOUT */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 50px;
+        }
+        .header-content {
+            max-width: 70%;
+        }
+        .profile-img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%; /* Makes it circular */
+            object-fit: cover;
+            margin-left: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        /* Responsive Design for Mobile */
+        @media (max-width: 600px) {
+            header {
+                flex-direction: column-reverse;
+                align-items: center;
+                text-align: center;
+            }
+            .header-content {
+                max-width: 100%;
+            }
+            .profile-img {
+                margin-bottom: 20px;
+                margin-left: 0;
+            }
+        }
+
+        h1 { font-size: 2.2rem; margin-bottom: 5px; letter-spacing: -0.5px; color: #111; line-height: 1.2; }
         h2 { font-size: 1.1rem; border-bottom: 1px solid #e0e0e0; padding-bottom: 8px; margin-top: 40px; text-transform: uppercase; letter-spacing: 0.5px; color: #333; }
         h3 { font-size: 1.05rem; margin-bottom: 2px; margin-top: 20px; font-weight: 600; }
-        .subtitle { color: var(--text-secondary); font-size: 1.1rem; margin-bottom: 25px; }
+        .subtitle { color: var(--text-secondary); font-size: 1.1rem; margin-bottom: 20px; }
         
         a { color: var(--accent-color); text-decoration: none; }
         a:hover { text-decoration: underline; }
         
-        .header-links { margin-top: 10px; font-size: 0.95rem; }
-        .header-links a { margin-right: 15px; }
+        .header-links { margin-top: 15px; font-size: 0.95rem; }
+        .header-links a { margin-right: 15px; display: inline-block; }
 
-        .job { margin-bottom: 25px; }
+        .job { margin-bottom: 25px; text-align: left; }
         .role-header { display: flex; justify-content: space-between; align-items: baseline; }
         .date { color: var(--text-secondary); font-size: 0.85rem; font-variant-numeric: tabular-nums; }
         
-        ul { padding-left: 18px; margin-top: 8px; }
+        ul { padding-left: 18px; margin-top: 8px; text-align: left; }
         li { margin-bottom: 6px; color: #444; font-size: 0.95rem; }
         
         /* Tags for skills */
@@ -53,7 +89,7 @@
         }
         
         /* Publications styling */
-        .paper-item { margin-bottom: 18px; }
+        .paper-item { margin-bottom: 18px; text-align: left; }
         .paper-title { font-weight: 600; color: var(--text-primary); font-size: 1rem; }
         .paper-venue { font-style: italic; color: var(--text-secondary); font-size: 0.9rem; margin-top: 2px; }
 
@@ -63,22 +99,26 @@
 <body>
 
     <header>
-        <h1>Mohamed Rissal Hedna</h1>
-        <div class="subtitle">
-            AI Engineer & Researcher (M.Sc.)<br>
-            Specializing in Efficient Deep Learning & LLM Calibration
+        <div class="header-content">
+            <h1>Mohamed Rissal Hedna</h1>
+            <div class="subtitle">
+                AI Engineer & Researcher (M.Sc.)<br>
+                Specializing in Efficient Deep Learning & LLM Calibration
+            </div>
+            <p style="color: #444;">
+                I bridge the gap between state-of-the-art research and hardware-aware implementation. 
+                Currently a Master's student at the University of Hamburg, focusing on <strong>Unsupervised Self-Calibration in Language Models</strong>.
+                Previously engineered efficient pipelines for Pharos Labs and AdaLab, scaling systems to 100k+ users.
+            </p>
+            <div class="header-links">
+                <a href="mailto:rissalhedna@gmail.com">rissalhedna@gmail.com</a>
+                <a href="assets/pdf/cv.pdf">Download CV</a>
+                <a href="https://github.com/rissalhedna">GitHub</a>
+                <a href="https://www.linkedin.com/in/rissal-h-949486121/">LinkedIn</a>
+            </div>
         </div>
-        <p style="max-width: 700px; color: #444;">
-            I bridge the gap between state-of-the-art research and hardware-aware implementation. 
-            Currently a Master's student at the University of Hamburg, focusing on <strong>Unsupervised Self-Calibration in Language Models</strong>.
-            Previously engineered efficient pipelines for Pharos Labs and AdaLab, scaling systems to 100k+ users.
-        </p>
-        <div class="header-links">
-            <a href="mailto:rissalhedna@gmail.com">rissalhedna@gmail.com</a>
-            <a href="assets/pdf/cv.pdf">Download CV</a>
-            <a href="https://github.com/rissalhedna">GitHub</a>
-            <a href="https://www.linkedin.com/in/rissal-h-949486121/">LinkedIn</a>
-        </div>
+        
+        <img src="profile.jpg" alt="Mohamed Rissal Hedna" class="profile-img">
     </header>
 
     <section>
