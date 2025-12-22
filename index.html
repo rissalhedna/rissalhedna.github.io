@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mohamed Rissal Hedna - AI Engineer & Researcher</title>
+    <title>Mohamed Rissal Hedna - AI Engineer</title>
     <style>
         /* Minimalist "Academic" Design */
         :root {
@@ -26,8 +26,8 @@
         header {
             display: flex;
             justify-content: space-between;
-            align-items: flex-start; /* Aligns top of text with top of image */
-            margin-bottom: 50px;
+            align-items: flex-start;
+            margin-bottom: 40px;
         }
         .header-content {
             max-width: 65%;
@@ -35,34 +35,32 @@
         .profile-img {
             width: 230px;
             height: 230px;
-            border-radius: 4px; /* Square with slight rounding */
+            border-radius: 4px; 
             object-fit: cover;
             margin-left: 20px;
             display: block;
         }
 
-        /* Responsive Design for Mobile */
         @media (max-width: 650px) {
             header {
                 flex-direction: column-reverse;
                 align-items: center;
                 text-align: center;
             }
-            .header-content {
-                max-width: 100%;
-            }
+            .header-content { max-width: 100%; }
             .profile-img {
                 margin-bottom: 25px;
                 margin-left: 0;
                 width: 200px;
                 height: 200px;
             }
+            .skills-grid { grid-template-columns: 1fr !important; }
         }
 
         /* TYPOGRAPHY */
         h1 { 
             font-size: 2.2rem; 
-            margin-top: 0; /* CRITICAL: Forces text to align with top of image */
+            margin-top: 0; 
             margin-bottom: 5px; 
             letter-spacing: -0.5px; 
             color: #111; 
@@ -91,6 +89,20 @@
         .header-links { margin-top: 15px; font-size: 0.95rem; }
         .header-links a { margin-right: 15px; display: inline-block; }
 
+        /* SKILLS SECTION */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 30px;
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 6px;
+        }
+        .skill-category { font-size: 0.9rem; }
+        .skill-title { font-weight: 700; color: #333; display: block; margin-bottom: 4px; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.5px;}
+
+        /* EXPERIENCE & PROJECTS */
         .job { margin-bottom: 25px; text-align: left; }
         .role-header { display: flex; justify-content: space-between; align-items: baseline; }
         .date { color: var(--text-secondary); font-size: 0.85rem; font-variant-numeric: tabular-nums; }
@@ -98,7 +110,6 @@
         ul { padding-left: 18px; margin-top: 8px; text-align: left; }
         li { margin-bottom: 6px; color: #444; font-size: 0.95rem; }
         
-        /* Tags for skills */
         .tags-container { margin-top: 8px; }
         .tag { 
             display: inline-block; 
@@ -111,7 +122,7 @@
             font-weight: 500;
         }
         
-        /* Publications styling */
+        /* PUBLICATIONS */
         .paper-item { margin-bottom: 18px; text-align: left; }
         .paper-title { font-weight: 600; color: var(--text-primary); font-size: 1rem; }
         .paper-venue { font-style: italic; color: var(--text-secondary); font-size: 0.9rem; margin-top: 2px; }
@@ -131,7 +142,7 @@
             <p style="color: #444;">
                 I bridge the gap between state-of-the-art research and hardware-aware implementation. 
                 Currently a Master's student at the University of Hamburg, focusing on <strong>Unsupervised Self-Calibration in Language Models</strong>.
-                Previously engineered efficient pipelines for Pharos Labs and AdaLab, scaling systems to 100k+ users.
+                Previously engineered efficient pipelines for Pharos Labs and AdaLab, scaling systems to <strong>100k+ users</strong>.
             </p>
             <div class="header-links">
                 <a href="mailto:rissalhedna@gmail.com">rissalhedna@gmail.com</a>
@@ -145,6 +156,49 @@
     </header>
 
     <section>
+        <div class="skills-grid">
+            <div class="skill-category">
+                <span class="skill-title">Core Stack</span>
+                Python, PyTorch, C/Python Interop, Docker, CI/CD, Git
+            </div>
+            <div class="skill-category">
+                <span class="skill-title">LLM & GenAI</span>
+                LlamaIndex, Qdrant, Multi-Agent Systems, RAG, Hallucination Detection
+            </div>
+            <div class="skill-category">
+                <span class="skill-title">Performance Engineering</span>
+                Inference Optimization, Memory Profiling, Quantization, BF16 Training
+            </div>
+            <div class="skill-category">
+                <span class="skill-title">Research Areas</span>
+                Self-Reflecting LMs, Uncertainty Quantification, Computer Vision
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <h2>Education</h2>
+        <div class="job">
+            <div class="role-header">
+                <h3>M.Sc. Intelligent Adaptive Systems | University of Hamburg</h3>
+                <span class="date">Expected 2026</span>
+            </div>
+            <div style="font-size: 0.9rem; color: #555;">
+                Thesis: <em>"SERL: SElf-Reflecting Language Models"</em><br>
+                CGPA: 1.69 (German Scale, 1.0=Best)
+            </div>
+        </div>
+        <div class="job">
+            <div class="role-header">
+                <h3>B.Sc. Computer Science | Lebanese American University</h3>
+            </div>
+            <div style="font-size: 0.9rem; color: #555;">
+                CGPA: 3.91/4.0 (High Distinction) • MEPI TL Full Scholarship Recipient
+            </div>
+        </div>
+    </section>
+
+    <section>
         <h2>Experience</h2>
 
         <div class="job">
@@ -155,7 +209,7 @@
             <ul>
                 <li>Engineered a high-throughput data pipeline, performing memory profiling to reduce end-to-end latency by <strong>20%</strong>.</li>
                 <li>Designed automated evaluation workflows for multi-agent reasoning systems, including reliability checks and failure case analysis.</li>
-                <li>Delivered production-grade features driving a 25% increase in user adoption.</li>
+                <li>Delivered production-grade features driving a <strong>25% increase</strong> in user adoption.</li>
             </ul>
         </div>
 
@@ -165,7 +219,7 @@
                 <span class="date">Oct 2025 – Jan 2026</span>
             </div>
             <ul>
-                <li>Architected an end-to-end generative content engine that transforms raw financial datasets into short-form video content.</li>
+                <li>Architected an end-to-end generative content engine transforming raw financial datasets into short-form video content.</li>
                 <li>Led the engineering of a multimodal system (Text-to-Video/Audio), automating the full production lifecycle.</li>
                 <li>Designed retrieval architecture for complex financial queries ensuring data consistency.</li>
             </ul>
@@ -205,7 +259,7 @@
             <p style="font-size: 0.95rem; color: #444; margin: 5px 0;">Engineered a custom "T5-Efficient" Transformer for resource-constrained devices.</p>
             <ul>
                 <li>Slashed parameter count by <strong>81%</strong> (17.7M to 3.3M) by optimizing layer distribution.</li>
-                <li>Orchestrated training in PyTorch using BF16 mixed-precision, converging in under 12 hours on single-GPU infrastructure.</li>
+                <li>Orchestrated training in PyTorch using <strong>BF16 mixed-precision</strong>, converging in under 12 hours on single-GPU.</li>
             </ul>
             <div class="tags-container">
                 <span class="tag">PyTorch</span>
@@ -219,7 +273,7 @@
                 <h3>UniLLM: RAG-based Assistant</h3>
             </div>
             <ul>
-                <li>Architected a retrieval-augmented generation system using LlamaIndex and Qdrant.</li>
+                <li>Architected a retrieval-augmented generation system using <strong>LlamaIndex</strong> and <strong>Qdrant</strong>.</li>
                 <li>Optimized retrieval chunks to achieve a <strong>13% reduction</strong> in query resolution time.</li>
             </ul>
             <div class="tags-container">
