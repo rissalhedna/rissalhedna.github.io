@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mohamed Rissal Hedna - AI Performance Engineer</title>
+    <style>
+        /* Minimalist "Academic" Design */
+        :root {
+            --bg-color: #ffffff;
+            --text-primary: #333333;
+            --text-secondary: #666666;
+            --accent-color: #0066cc;
+            --font-main: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+        body {
+            font-family: var(--font-main);
+            line-height: 1.6;
+            color: var(--text-primary);
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        h1 { font-size: 2.5rem; margin-bottom: 5px; letter-spacing: -0.5px; }
+        h2 { font-size: 1.2rem; border-bottom: 2px solid #f0f0f0; padding-bottom: 10px; margin-top: 40px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-primary); }
+        h3 { font-size: 1.1rem; margin-bottom: 5px; margin-top: 20px; }
+        .subtitle { color: var(--text-secondary); font-size: 1.1rem; margin-bottom: 30px; }
+        a { color: var(--accent-color); text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        
+        .role-header { display: flex; justify-content: space-between; align-items: baseline; }
+        .date { color: var(--text-secondary); font-size: 0.9rem; font-feature-settings: "tnum"; }
+        .tag { display: inline-block; background: #f4f4f4; padding: 2px 8px; border-radius: 4px; font-size: 0.8rem; color: #555; margin-right: 5px; }
+        
+        ul { padding-left: 20px; margin-top: 5px; }
+        li { margin-bottom: 5px; color: #444; }
+        
+        .paper-item { margin-bottom: 15px; }
+        .paper-title { font-weight: 600; color: var(--text-primary); }
+        .paper-venue { font-style: italic; color: var(--text-secondary); }
+        
+        .contact-links { margin-top: 50px; border-top: 1px solid #eee; padding-top: 20px; color: var(--text-secondary); font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Mohamed Rissal Hedna</h1>
+        <div class="subtitle">
+            AI Performance Engineer & Researcher (M.Sc.)<br>
+            Specializing in Efficient Deep Learning & LLM Calibration
+        </div>
+        <p>
+            I bridge the gap between state-of-the-art research and hardware-aware implementation. 
+            Currently a Master's student at the University of Hamburg, focusing on <strong>Unsupervised Self-Calibration in Language Models</strong>.
+            Previously engineered efficient pipelines for Pharos Labs and AdaLab, scaling systems to 100k+ users.
+        </p>
+        <p>
+            <a href="mailto:rissalhedna@gmail.com">rissalhedna@gmail.com</a> • 
+            <a href="assets/pdf/cv.pdf">Download CV</a> • 
+            <a href="https://github.com/yourusername">GitHub</a> • 
+            <a href="https://linkedin.com/in/yourprofile">LinkedIn</a>
+        </p>
+    </header>
+
+    <section>
+        <h2>Experience</h2>
+
+        <div class="job">
+            <div class="role-header">
+                <h3>Pharos Labs - AI Engineer</h3>
+                <span class="date">Jan 2024 – Present</span>
+            </div>
+            <ul>
+                [cite_start]<li>Engineered a high-throughput data pipeline, performing memory profiling to reduce end-to-end latency by <strong>20%</strong>[cite: 15].</li>
+                [cite_start]<li>Designed automated evaluation workflows for multi-agent reasoning systems, including reliability checks and failure case analysis[cite: 17].</li>
+                [cite_start]<li>Delivered production-grade features driving a 25% increase in user adoption[cite: 16].</li>
+            </ul>
+        </div>
+
+        <div class="job">
+            <div class="role-header">
+                <h3>AdaLab UG - Machine Learning Developer</h3>
+                <span class="date">Jan 2023 – Jan 2024</span>
+            </div>
+            <ul>
+                [cite_start]<li>Scaled a multimodal AI platform (Plazmapunk) to <strong>100,000+ users</strong>[cite: 331].</li>
+                [cite_start]<li>Reduced pipeline latency by <strong>78%</strong> by researching and testing efficient vision-language architectures[cite: 332].</li>
+                [cite_start]<li>Implemented parallel execution strategies to resolve critical high-load bottlenecks[cite: 25].</li>
+            </ul>
+        </div>
+
+        <div class="job">
+            <div class="role-header">
+                <h3>Advanced Telerobotics Lab - Visiting Researcher</h3>
+                <span class="date">2022</span>
+            </div>
+            <ul>
+                [cite_start]<li>Engineered a custom C/Python CNN architecture achieving <strong>&lt;50ms inference latency</strong> on embedded NVIDIA Jetson hardware[cite: 56].</li>
+                [cite_start]<li>Optimized real-time obstacle detection in GPS-denied environments[cite: 56].</li>
+            </ul>
+        </div>
+    </section>
+
+    <section>
+        <h2>Selected Projects</h2>
+
+        <div class="job">
+            <div class="role-header">
+                <h3>Lightweight Transformer Optimization (T5-Efficient)</h3>
+            </div>
+            <p>Engineered a custom "T5-Efficient" Transformer for resource-constrained devices.</p>
+            <ul>
+                [cite_start]<li>Slashed parameter count by <strong>81%</strong> (17.7M to 3.3M) by optimizing layer distribution[cite: 29].</li>
+                [cite_start]<li>Orchestrated training in PyTorch using BF16 mixed-precision, converging in under 12 hours on single-GPU infrastructure[cite: 30].</li>
+            </ul>
+            <div>
+                <span class="tag">PyTorch</span>
+                <span class="tag">Model Compression</span>
+                <span class="tag">BF16</span>
+            </div>
+        </div>
+
+        <div class="job">
+            <div class="role-header">
+                <h3>UniLLM: RAG-based Assistant</h3>
+            </div>
+            <ul>
+                [cite_start]<li>Architected a retrieval-augmented generation system using LlamaIndex and Qdrant[cite: 32].</li>
+                [cite_start]<li>Optimized retrieval chunks to achieve a <strong>13% reduction</strong> in query resolution time[cite: 32].</li>
+            </ul>
+            <div>
+                <span class="tag">RAG</span>
+                <span class="tag">LlamaIndex</span>
+                <span class="tag">Qdrant</span>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <h2>Publications & Preprints</h2>
+
+        <div class="paper-item">
+            <div class="paper-title">SERL: SElf-Reflecting Language Models</div>
+            <div class="paper-venue">M. Rissal Hedna, Chris Biemann. [cite_start]Manuscript in Preparation (Targeting ACL/EMNLP 2025)[cite: 36].</div>
+        </div>
+
+        <div class="paper-item">
+            <div class="paper-title">Simulated Adversarial Patch Attacks on Vision-Based Logistics Systems</div>
+            <div class="paper-venue">Sesugh Nder, M. Rissal Hedna. [cite_start]Technical Report, University of Hamburg, 2024. <a href="https://arxiv.org/abs/2511.19254">arXiv:2511.19254</a>[cite: 39, 40].</div>
+        </div>
+
+        <div class="paper-item">
+            <div class="paper-title">A Model for the Automatic Mixing of Multiple Video and Audio Clips</div>
+            <div class="paper-venue">M. Rissal Hedna, et al. [cite_start]Proceedings of the 2023 International Conference on Cyberworlds (CW)[cite: 37, 38].</div>
+        </div>
+    </section>
+
+    <div class="contact-links">
+        &copy; 2025 Mohamed Rissal Hedna. Hosted on GitHub Pages.
+    </div>
+
+</body>
+</html>
