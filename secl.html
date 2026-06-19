@@ -95,6 +95,18 @@ p.body{max-width:64ch;margin:14px 0;font-size:16.5px;line-height:1.6}
 .rel-card.v .ece{color:var(--red)}
 .rel-card.s .ece{color:var(--blue)}
 .rel-card svg{width:100%;height:auto;display:block}
+.oneq-q{font-size:17px;line-height:1.45;margin:6px 0 14px}
+.oneq-q .dom{font-family:var(--mono);font-size:11px;color:var(--red);letter-spacing:.1em;text-transform:uppercase;margin-right:10px}
+.oneq-ans{font-family:var(--mono);font-size:12.5px;letter-spacing:.04em;margin-bottom:20px;opacity:.95}
+.meter-row{display:grid;grid-template-columns:210px 1fr 56px;align-items:center;gap:14px;margin:12px 0}
+.meter-lab{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;opacity:.85}
+.meter-track{height:16px;background:rgba(239,233,220,.14);border-radius:20px;overflow:hidden}
+.meter-fill{display:block;height:100%;width:0;border-radius:20px;transition:width .6s cubic-bezier(.5,0,.1,1)}
+.meter-fill.v{background:var(--red)}
+.meter-fill.s{background:var(--blue)}
+.meter-val{font-family:var(--mono);font-size:14px;text-align:right}
+.oneq-gap{margin-top:20px;padding-top:14px;border-top:1px solid rgba(239,233,220,.2);font-size:14.5px;line-height:1.55}
+@media(max-width:620px){.meter-row{grid-template-columns:1fr;gap:4px}.meter-val{text-align:left}}
 .cap{font-family:var(--mono);font-size:11px;letter-spacing:.05em;opacity:.7;margin-top:14px;text-align:center}
 .animbtn{margin-top:18px}
 
@@ -353,25 +365,19 @@ footer a.link{color:var(--blue)}
 
     <div class="demo-body">
       <div class="btnrow" style="margin-bottom:18px">
-        <button class="btn solid" id="runAll" type="button">Run the question stream</button>
-        <button class="btn" id="runOne" type="button">Run one question</button>
+        <button class="btn solid" id="runOne" type="button">Run a question →</button>
         <button class="btn" id="resetDemo" type="button">Reset</button>
       </div>
-      <div class="status" id="status">Idle. Default model is Llama 3.2-3B via OpenRouter, the headline model from the paper.</div>
-
-      <div class="demo-metrics">
-        <div class="dm v1"><div class="k">Actual accuracy</div><div class="v" id="m-acc">—</div></div>
-        <div class="dm v2"><div class="k">Avg stated confidence</div><div class="v" id="m-conf">—</div></div>
-        <div class="dm v3"><div class="k">Avg gap · NormP(True) − conf</div><div class="v" id="m-corr">—</div></div>
-      </div>
+      <div class="status" id="status">Idle. Add your key, pick a provider, then run a single question. Default model: Llama 3.2-3B via OpenRouter.</div>
 
       <div class="rel-card" style="margin-bottom:22px">
-        <div class="rc-top"><span class="rc-title">Per-question gap · NormP(True) − stated confidence</span></div>
-        <svg id="gaps-svg" viewBox="0 0 680 300"></svg>
-        <div class="d-legend" style="display:flex;gap:18px;flex-wrap:wrap;margin-top:10px;font-family:var(--mono);font-size:10.5px;letter-spacing:.05em;text-transform:uppercase">
-          <span><i style="display:inline-block;width:12px;height:12px;background:var(--blue);vertical-align:middle;margin-right:6px"></i>Positive · signal higher → push confidence up</span>
-          <span><i style="display:inline-block;width:12px;height:12px;background:var(--red);vertical-align:middle;margin-right:6px"></i>Negative · overconfident → pull confidence down</span>
-          <span><i style="display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--green);vertical-align:middle;margin-right:6px"></i>Correct&nbsp;&nbsp;<i style="display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--red);vertical-align:middle;margin:0 6px"></i>Wrong</span>
+        <div id="oneq-empty" class="rc-title" style="opacity:.6;padding:16px 2px;line-height:1.6">Press “Run a question” to see what the model <em>says</em> vs. what its own self-check actually <em>knows</em>.</div>
+        <div id="oneq-card" style="display:none">
+          <div class="oneq-q"><span class="dom" id="oq-dom"></span><span id="oq-q"></span></div>
+          <div class="oneq-ans">Model answered <b id="oq-ans">—</b> · <span id="oq-verdict"></span></div>
+          <div class="meter-row"><span class="meter-lab">Stated confidence</span><div class="meter-track"><i id="oq-bar-c" class="meter-fill v"></i></div><span class="meter-val" id="oq-val-c">—</span></div>
+          <div class="meter-row"><span class="meter-lab">Self-check · NormP(True)</span><div class="meter-track"><i id="oq-bar-s" class="meter-fill s"></i></div><span class="meter-val" id="oq-val-s">—</span></div>
+          <div class="oneq-gap" id="oq-gap"></div>
         </div>
       </div>
 
@@ -384,9 +390,9 @@ footer a.link{color:var(--blue)}
 
       <div class="disclaim">
         <b>What this is and isn't</b>
-        No weights are updated in your browser, so this is <b>not</b> the calibrated end-model — reproducing the paper's full reliability curves needs the LoRA test-time training and thousands of questions. Instead each bar is a single question, showing the <b>gap and its direction</b>: NormP(True) − stated confidence. A negative (red) bar means the model was overconfident and its own discriminative signal says pull confidence down; a positive (blue) bar means push it up. This per-question gap is exactly the signal SECL's directional update (Eq. 4) distills into LoRA weights. Verbalized confidence uses the paper's Main QA + confidence-bin prompt (Appendix A); the discriminative NormP(True) signal (Eq. 3) is elicited as a graded per-candidate score and normalized across distractors — an in-browser stand-in for the paper's logprob-based P(True), which needs token probabilities most hosted APIs don't expose. Option positions are shuffled per question to remove answer-key bias. Your API key stays in your browser and is sent only to the provider you choose.
+        No weights are updated in your browser, so this is <b>not</b> the calibrated end-model — that needs the LoRA test-time training over thousands of questions. Each run shows one question and the core premise SECL exploits: the model states a confidence, but its own discriminative <b>self-check</b> (NormP(True), Eq. 3) often disagrees — especially when it is wrong. The signed gap (self-check − stated) is exactly what SECL's directional update (Eq. 4) distills into the weights. Verbalized confidence uses the paper's Main QA + confidence-bin prompt (Appendix A); the self-check is a graded per-candidate score normalized across distractors, a browser stand-in for the paper's logprob-based P(True). Option positions are shuffled to remove answer-key bias. Your API key stays in your browser and is sent only to the provider you choose.
       </div>
-      <p class="note">Tip: OpenRouter works cleanly from the browser and can serve the exact paper models (Llama 3.2-3B, Gemma 2-2B, Phi-3.5, Llama 3.1-8B). If a provider blocks browser requests with a CORS error, switch to OpenRouter. TruthfulQA-style questions in the stream are where overconfidence shows most.</p>
+      <p class="note">Tip: OpenRouter and Google Gemini both work cleanly from the browser. If a provider blocks requests with a CORS error, switch to OpenRouter. The gap is widest on TruthfulQA-style misconception questions, where models are most overconfident.</p>
     </div>
   </div>
 </section>
@@ -594,12 +600,12 @@ var els={
   tau:document.getElementById('tau'),
   remember:document.getElementById('remember'),
   status:document.getElementById('status'),
-  runAll:document.getElementById('runAll'),
   runOne:document.getElementById('runOne'),
   reset:document.getElementById('resetDemo'),
   logbody:document.getElementById('logbody'),
-  mAcc:document.getElementById('m-acc'),mConf:document.getElementById('m-conf'),mCorr:document.getElementById('m-corr'),
-  gapsSvg:document.getElementById('gaps-svg')
+  oneqEmpty:document.getElementById('oneq-empty'),oneqCard:document.getElementById('oneq-card'),
+  oqDom:document.getElementById('oq-dom'),oqQ:document.getElementById('oq-q'),oqAns:document.getElementById('oq-ans'),oqVerdict:document.getElementById('oq-verdict'),
+  oqBarC:document.getElementById('oq-bar-c'),oqBarS:document.getElementById('oq-bar-s'),oqValC:document.getElementById('oq-val-c'),oqValS:document.getElementById('oq-val-s'),oqGap:document.getElementById('oq-gap')
 };
 
 // restore remembered key
@@ -765,41 +771,30 @@ function eceFrom(pairs){ // pairs: [{p, y}]
   }
   return {ece:ece, accs:accs};
 }
-function avg(a){return a.length?a.reduce(function(x,y){return x+y;},0)/a.length:null;}
-/* per-question diverging bars: gap = NormP(True) − stated confidence.
-   Up/blue = signal higher (push confidence up); down/red = overconfident (pull down).
-   Dot under each bar = correct (green) / wrong (red). */
-function drawGaps(svg, recs){
-  var X0=58,X1=662,TOP=34,BOT=258,MID=(TOP+BOT)/2,HH=(BOT-TOP)/2;
-  function gy(g){return MID - Math.max(-1,Math.min(1,g))*HH;}
-  var parts=[];
-  parts.push('<g stroke="rgba(239,233,220,.14)" stroke-width="1">');
-  [-1,-0.5,0,0.5,1].forEach(function(v){var y=gy(v);
-    parts.push('<line x1="'+X0+'" y1="'+y+'" x2="'+X1+'" y2="'+y+'"'+(v===0?' stroke="var(--paper)" stroke-opacity=".5"':'')+'/>');
-    parts.push('<text x="'+(X0-8)+'" y="'+(y+4)+'" fill="var(--paper)" opacity=".55" font-family="Space Mono,monospace" font-size="10" text-anchor="end">'+(v>0?'+':'')+Math.round(v*100)+'</text>');
-  });
-  parts.push('</g>');
-  parts.push('<text x="20" y="'+MID+'" fill="var(--paper)" opacity=".7" font-family="Space Mono,monospace" font-size="10" text-anchor="middle" transform="rotate(-90 20 '+MID+')">GAP · NormP(True) − conf (pts)</text>');
-  if(recs.length){
-    var n=recs.length, slot=(X1-X0)/n, bw=Math.max(3,Math.min(24,slot*0.66));
-    recs.forEach(function(r,i){
-      var g=r.normPTrue-r.conf, x=X0+(i+0.5)*slot, y=gy(g), col=g<0?'var(--red)':'var(--blue)';
-      var top=Math.min(MID,y), h=Math.max(1,Math.abs(y-MID));
-      parts.push('<rect x="'+(x-bw/2).toFixed(1)+'" y="'+top.toFixed(1)+'" width="'+bw.toFixed(1)+'" height="'+h.toFixed(1)+'" fill="'+col+'" opacity="0.9"><title>'+r.item.d+' — stated '+(r.conf*100).toFixed(0)+'%, signal '+(r.normPTrue*100).toFixed(0)+'%, gap '+(g>=0?'+':'')+(g*100).toFixed(0)+' pts, '+(r.correct?'correct':'wrong')+'</title></rect>');
-      parts.push('<circle cx="'+x.toFixed(1)+'" cy="'+(BOT+14)+'" r="3" fill="'+(r.correct?'var(--green)':'var(--red)')+'"/>');
-    });
+/* render one question: what the model said vs. what its self-check knows */
+function renderOne(r){
+  els.oneqEmpty.style.display='none';
+  els.oneqCard.style.display='';
+  els.oqDom.textContent=r.item.d;
+  els.oqQ.textContent=r.item.q;
+  els.oqAns.textContent=r.answer+') '+r.item.opts[r.answer];
+  els.oqVerdict.innerHTML=r.correct
+    ? '<span style="color:var(--green)">✓ actually correct</span>'
+    : '<span style="color:var(--red)">✗ actually wrong</span>';
+  var c=Math.round(r.conf*100), s=Math.round(r.normPTrue*100), gap=s-c;
+  // animate bars from 0
+  els.oqBarC.style.width='0%'; els.oqBarS.style.width='0%';
+  els.oqValC.textContent=c+'%'; els.oqValS.textContent=s+'%';
+  requestAnimationFrame(function(){ els.oqBarC.style.width=c+'%'; els.oqBarS.style.width=s+'%'; });
+  var msg;
+  if(gap<-2){
+    msg='The model <b>stated '+c+'%</b> confidence, but its own self-check rates that answer just <b>'+s+'%</b> — a <b style="color:var(--red)">'+gap+' pt</b> gap. SECL nudges its stated confidence <b>down</b> toward the self-check'+(r.correct?'.':', exactly the kind of overconfident-and-wrong case it targets.');
+  } else if(gap>2){
+    msg='The model <b>understated</b>: '+c+'% stated vs <b>'+s+'%</b> on its self-check (<b style="color:var(--blue)">+'+gap+' pts</b>). SECL nudges its confidence <b>up</b> toward what it actually knows.';
+  } else {
+    msg='Stated confidence ('+c+'%) already matches the self-check ('+s+'%). The bin gate leaves it unchanged — no spurious update.';
   }
-  svg.innerHTML=parts.join('');
-}
-function refresh(){
-  drawGaps(els.gapsSvg, records);
-  var acc=avg(records.map(function(r){return r.correct?1:0;}));
-  var mc=avg(records.map(function(r){return r.conf;}));
-  var gp=avg(records.map(function(r){return r.normPTrue-r.conf;}));
-  var pct=function(x){return x===null?'—':Math.round(x*100)+'%';};
-  els.mAcc.textContent=pct(acc);
-  els.mConf.textContent=pct(mc);
-  els.mCorr.textContent=gp===null?'—':((gp>=0?'+':'')+Math.round(gp*100)+' pts');
+  els.oqGap.innerHTML=msg;
 }
 function clearPlaceholder(){ if(els.logbody.querySelector('td[colspan]')) els.logbody.innerHTML=''; }
 function logRow(r){
@@ -820,24 +815,21 @@ function logFailRow(r){
   els.logbody.appendChild(tr);
 }
 
-function setBusy(b){els.runAll.disabled=b;els.runOne.disabled=b;els.runAll.style.opacity=b?.5:1;els.runOne.style.opacity=b?.5:1;}
-var oneIdx=0;
+function setBusy(b){els.runOne.disabled=b;els.runOne.style.opacity=b?.5:1;els.runOne.textContent=b?'Running…':'Run a question →';}
 
-async function go(items){
+async function go(){
   setBusy(true); els.status.classList.remove('err');
-  var failed=0, lastRaw='';
   try{
-    for(var i=0;i<items.length;i++){
-      els.status.textContent='Running '+(i+1)+' / '+items.length+'  ·  '+items[i].d+' question…';
-      var rec=await runQuestion(items[i]);
-      if(rec.failed){ failed++; lastRaw=rec.raw; logFailRow(rec); }
-      else { records.push(rec); logRow(rec); refresh(); }
-    }
-    if(records.length===0){
+    var item=QUESTIONS[Math.floor(Math.random()*QUESTIONS.length)];
+    els.status.textContent='Asking the model a '+item.d+' question…';
+    var rec=await runQuestion(item);
+    if(rec.failed){
       els.status.classList.add('err');
-      els.status.textContent='All '+failed+' responses were unparsed — the model returned no valid JSON. Example: '+lastRaw+'  ·  Try a stronger model (e.g. Gemini 2.0 Flash) or a different provider.';
+      els.status.textContent='Could not parse the model reply ('+rec.raw+'). Try Gemini 2.0 Flash, or switch the provider to OpenRouter.';
     } else {
-      els.status.textContent='Done. '+records.length+' parsed'+(failed?(' · '+failed+' unparsed'):'')+'. Each bar is one question: red bars (gap < 0) are where the model was overconfident and its own P(True) says pull confidence down; that is the directional signal SECL distills.';
+      records.push(rec); logRow(rec); renderOne(rec);
+      var nc=records.filter(function(r){return r.correct;}).length;
+      els.status.textContent='Ran '+records.length+' question'+(records.length>1?'s':'')+' · '+nc+' correct so far. Press again for another.';
     }
   }catch(err){
     els.status.classList.add('err');
@@ -845,17 +837,13 @@ async function go(items){
   }finally{ setBusy(false); }
 }
 
-els.runAll.onclick=function(){ go(QUESTIONS); };
-els.runOne.onclick=function(){ var it=QUESTIONS[oneIdx%QUESTIONS.length]; oneIdx++; go([it]); };
+els.runOne.onclick=function(){ go(); };
 els.reset.onclick=function(){
-  records=[]; oneIdx=0;
+  records=[];
   els.logbody.innerHTML='<tr><td colspan="7" style="opacity:.5">No runs yet.</td></tr>';
-  els.mAcc.textContent='—';els.mConf.textContent='—';els.mCorr.textContent='—';
-  drawGaps(els.gapsSvg, []);
+  els.oneqCard.style.display='none'; els.oneqEmpty.style.display='';
   els.status.textContent='Reset. Ready to run.';
 };
-// init empty gap chart
-drawGaps(els.gapsSvg, []);
 })();
 </script>
 </body>
