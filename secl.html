@@ -360,19 +360,17 @@ footer a.link{color:var(--blue)}
       <div class="status" id="status">Idle. Default model is Llama 3.2-3B via OpenRouter, the headline model from the paper.</div>
 
       <div class="demo-metrics">
-        <div class="dm v1"><div class="k">Verbalized ECE</div><div class="v" id="m-ece-v">—</div></div>
-        <div class="dm v2"><div class="k">NormP(True) ECE · the signal SECL distills</div><div class="v" id="m-ece-s">—</div></div>
-        <div class="dm v3"><div class="k">Avg gap |c − c*|</div><div class="v" id="m-gap">—</div></div>
+        <div class="dm v1"><div class="k">Verbalized confidence on wrong answers</div><div class="v" id="m-verb-wrong">—</div></div>
+        <div class="dm v2"><div class="k">P(True) self-check on wrong answers</div><div class="v" id="m-np-wrong">—</div></div>
+        <div class="dm v3"><div class="k">P(True) separation · correct − wrong</div><div class="v" id="m-sep">—</div></div>
       </div>
 
-      <div class="rel-grid" style="margin-bottom:22px">
-        <div class="rel-card v">
-          <div class="rc-top"><span class="rc-title">Live · verbalized</span><span class="ece" id="live-ece-v">—</span></div>
-          <svg id="live-v" viewBox="0 0 320 280"></svg>
-        </div>
-        <div class="rel-card s">
-          <div class="rc-top"><span class="rc-title">Live · NormP(True) — distilled by SECL</span><span class="ece" id="live-ece-s">—</span></div>
-          <svg id="live-s" viewBox="0 0 320 280"></svg>
+      <div class="rel-card" style="margin-bottom:22px">
+        <div class="rc-top"><span class="rc-title">Generation–discrimination gap · average confidence on correct vs wrong answers</span></div>
+        <svg id="gap-svg" viewBox="0 0 680 268"></svg>
+        <div class="d-legend" style="display:flex;gap:18px;margin-top:10px;font-family:var(--mono);font-size:10.5px;letter-spacing:.05em;text-transform:uppercase">
+          <span><i style="display:inline-block;width:14px;height:10px;background:var(--green);vertical-align:middle;margin-right:6px"></i>Correct answers</span>
+          <span><i style="display:inline-block;width:14px;height:10px;background:var(--red);vertical-align:middle;margin-right:6px"></i>Wrong answers</span>
         </div>
       </div>
 
@@ -385,7 +383,7 @@ footer a.link{color:var(--blue)}
 
       <div class="disclaim">
         <b>What this is and isn't</b>
-        No weights are updated in your browser. This uses the paper's actual prompts (Appendix A): the Main QA + confidence-bin prompt for the verbalized signal, and the True/False P(True) verification probe over the answer plus its distractors. P(True) is read from the model's token logprobs when the provider returns them (otherwise it falls back to the True/False label, which is coarser). The right-hand curve plots <b>NormP(True)</b> (Eq. 3) — the discriminative signal SECL distills into LoRA weights so the model emits it natively in one forward pass; the per-question directional target ĉ (Eq. 4) is shown in the log. A short run is noisier than the paper's 2,000-question stream. Your API key stays in your browser and is sent only to the provider you choose.
+        No weights are updated in your browser, so this is <b>not</b> the calibrated end-model — reproducing the paper's reliability curves needs the LoRA test-time training and thousands of questions. Instead this demonstrates the <b>premise</b> SECL is built on: using the paper's actual prompts (Appendix A) — the Main QA + confidence-bin prompt and the True/False P(True) verification probe over the answer and its distractors — it shows that the model stays confident even when wrong, while its own <b>NormP(True)</b> self-check (Eq. 3) drops on those same wrong answers. SECL distills that better-separated signal into LoRA weights so the model emits it natively in one forward pass; the per-question directional target ĉ (Eq. 4) is in the log. P(True) is read from token logprobs when the provider returns them, else from the True/False label. Your API key stays in your browser and is sent only to the provider you choose.
       </div>
       <p class="note">Tip: OpenRouter works cleanly from the browser and can serve the exact paper models (Llama 3.2-3B, Gemma 2-2B, Phi-3.5, Llama 3.1-8B). If a provider blocks browser requests with a CORS error, switch to OpenRouter. TruthfulQA-style questions in the stream are where overconfidence shows most.</p>
     </div>
@@ -599,9 +597,8 @@ var els={
   runOne:document.getElementById('runOne'),
   reset:document.getElementById('resetDemo'),
   logbody:document.getElementById('logbody'),
-  mEceV:document.getElementById('m-ece-v'),mEceS:document.getElementById('m-ece-s'),mGap:document.getElementById('m-gap'),
-  liveV:document.getElementById('live-v'),liveS:document.getElementById('live-s'),
-  liveEceV:document.getElementById('live-ece-v'),liveEceS:document.getElementById('live-ece-s')
+  mVerbWrong:document.getElementById('m-verb-wrong'),mNpWrong:document.getElementById('m-np-wrong'),mSep:document.getElementById('m-sep'),
+  gapSvg:document.getElementById('gap-svg')
 };
 
 // restore remembered key
@@ -768,18 +765,39 @@ function eceFrom(pairs){ // pairs: [{p, y}]
   }
   return {ece:ece, accs:accs};
 }
+/* grouped bars: confidence on correct vs wrong, for verbalized vs P(True) */
+function drawGap(svg, d){
+  var X0=64, W=576, Y0=224, Ytop=20, bw=66, gap=22;
+  function py(v){return Y0-(Y0-Ytop)*v;}
+  function bar(x,v,col){return '<rect x="'+x+'" y="'+py(v)+'" width="'+bw+'" height="'+(Y0-py(v))+'" rx="2" fill="'+col+'" opacity="0.92"/>';}
+  function val(cx,v){return '<text x="'+cx+'" y="'+(py(v)-7)+'" fill="var(--paper)" font-family="Space Mono,monospace" font-size="12" text-anchor="middle">'+Math.round(v*100)+'%</text>';}
+  var parts=[];
+  parts.push('<g stroke="rgba(239,233,220,.16)" stroke-width="1">');
+  [0,0.25,0.5,0.75,1].forEach(function(v){var gy=py(v);
+    parts.push('<line x1="'+X0+'" y1="'+gy+'" x2="'+(X0+W)+'" y2="'+gy+'"/>');
+    parts.push('<text x="'+(X0-10)+'" y="'+(gy+4)+'" fill="var(--paper)" font-family="Space Mono,monospace" font-size="10" text-anchor="end" opacity=".55">'+(v*100)+'</text>');
+  });
+  parts.push('</g>');
+  var groups=[{lab:'VERBALIZED CONFIDENCE',c:d.vc,w:d.vw},{lab:'P(TRUE) SELF-CHECK',c:d.nc,w:d.nw}];
+  var gwid=W/2;
+  groups.forEach(function(g,gi){
+    var gx=X0+gi*gwid+gwid/2, cx1=gx-bw-gap/2, cx2=gx+gap/2;
+    if(g.c!=null){parts.push(bar(cx1,g.c,'var(--green)'));parts.push(val(cx1+bw/2,g.c));}
+    if(g.w!=null){parts.push(bar(cx2,g.w,'var(--red)'));parts.push(val(cx2+bw/2,g.w));}
+    parts.push('<text x="'+gx+'" y="'+(Y0+24)+'" fill="var(--paper)" font-family="Space Mono,monospace" font-size="11" text-anchor="middle" opacity=".8" letter-spacing="1">'+g.lab+'</text>');
+  });
+  svg.innerHTML=parts.join('');
+}
+function avg(a){return a.length?a.reduce(function(x,y){return x+y;},0)/a.length:null;}
 function refresh(){
-  var vp=records.map(function(r){return {p:r.conf,y:r.correct?1:0};});
-  var sp=records.map(function(r){return {p:r.normPTrue, y:r.correct?1:0};});
-  var V=eceFrom(vp), S=eceFrom(sp);
-  drawReliability(els.liveV, V.accs, 'var(--red)');
-  drawReliability(els.liveS, S.accs, 'var(--blue)');
-  var fmt=function(x){return x===null?'—':x.toFixed(3);};
-  els.liveEceV.textContent=V.ece===null?'—':'ECE '+V.ece.toFixed(3);
-  els.liveEceS.textContent=S.ece===null?'—':'ECE '+S.ece.toFixed(3);
-  els.mEceV.textContent=fmt(V.ece); els.mEceS.textContent=fmt(S.ece);
-  var gap=records.length?records.reduce(function(a,r){return a+Math.abs(r.conf-r.normPTrue);},0)/records.length:null;
-  els.mGap.textContent=gap===null?'—':gap.toFixed(3);
+  var cor=records.filter(function(r){return r.correct;}), wr=records.filter(function(r){return !r.correct;});
+  var vc=avg(cor.map(function(r){return r.conf;})), vw=avg(wr.map(function(r){return r.conf;}));
+  var nc=avg(cor.map(function(r){return r.normPTrue;})), nw=avg(wr.map(function(r){return r.normPTrue;}));
+  drawGap(els.gapSvg, {vc:vc,vw:vw,nc:nc,nw:nw});
+  var pct=function(x){return x===null?'—':Math.round(x*100)+'%';};
+  els.mVerbWrong.textContent=pct(vw);
+  els.mNpWrong.textContent=pct(nw);
+  els.mSep.textContent=(nc===null||nw===null)?'—':((nc-nw>=0?'+':'')+Math.round((nc-nw)*100)+' pts');
 }
 function clearPlaceholder(){ if(els.logbody.querySelector('td[colspan]')) els.logbody.innerHTML=''; }
 function logRow(r){
@@ -817,7 +835,7 @@ async function go(items){
       els.status.classList.add('err');
       els.status.textContent='All '+failed+' responses were unparsed — the model returned no valid JSON. Example: '+lastRaw+'  ·  Try a stronger model (e.g. Gemini 2.0 Flash) or a different provider.';
     } else {
-      els.status.textContent='Done. '+records.length+' parsed'+(failed?(' · '+failed+' unparsed'):'')+'. The NormP(True) bars (right) sit closer to the diagonal — the better-calibrated signal SECL distills into the weights.';
+      els.status.textContent='Done. '+records.length+' parsed'+(failed?(' · '+failed+' unparsed'):'')+'. On wrong answers, the model stays confident (verbalized) but its own P(True) self-check drops — that is the generation–discrimination gap SECL distills into the weights.';
     }
   }catch(err){
     els.status.classList.add('err');
@@ -830,15 +848,12 @@ els.runOne.onclick=function(){ var it=QUESTIONS[oneIdx%QUESTIONS.length]; oneIdx
 els.reset.onclick=function(){
   records=[]; oneIdx=0;
   els.logbody.innerHTML='<tr><td colspan="7" style="opacity:.5">No runs yet.</td></tr>';
-  els.mEceV.textContent='—';els.mEceS.textContent='—';els.mGap.textContent='—';
-  els.liveEceV.textContent='—';els.liveEceS.textContent='—';
-  drawReliability(els.liveV, Array(10).fill(null), 'var(--red)');
-  drawReliability(els.liveS, Array(10).fill(null), 'var(--blue)');
+  els.mVerbWrong.textContent='—';els.mNpWrong.textContent='—';els.mSep.textContent='—';
+  drawGap(els.gapSvg, {vc:null,vw:null,nc:null,nw:null});
   els.status.textContent='Reset. Ready to run.';
 };
-// init empty live charts
-drawReliability(els.liveV, Array(10).fill(null), 'var(--red)');
-drawReliability(els.liveS, Array(10).fill(null), 'var(--blue)');
+// init empty gap chart
+drawGap(els.gapSvg, {vc:null,vw:null,nc:null,nw:null});
 })();
 </script>
 </body>
