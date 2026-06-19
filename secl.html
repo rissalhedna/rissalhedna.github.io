@@ -362,16 +362,16 @@ footer a.link{color:var(--blue)}
       <div class="demo-metrics">
         <div class="dm v1"><div class="k">Actual accuracy</div><div class="v" id="m-acc">—</div></div>
         <div class="dm v2"><div class="k">Avg stated confidence</div><div class="v" id="m-conf">—</div></div>
-        <div class="dm v3"><div class="k">Overconfidence gap · conf − accuracy</div><div class="v" id="m-corr">—</div></div>
+        <div class="dm v3"><div class="k">Avg gap · NormP(True) − conf</div><div class="v" id="m-corr">—</div></div>
       </div>
 
       <div class="rel-card" style="margin-bottom:22px">
-        <div class="rc-top"><span class="rc-title">Calibration gap · stated confidence vs actual accuracy</span></div>
-        <svg id="calib-svg" viewBox="0 0 460 350"></svg>
+        <div class="rc-top"><span class="rc-title">Per-question gap · NormP(True) − stated confidence</span></div>
+        <svg id="gaps-svg" viewBox="0 0 680 300"></svg>
         <div class="d-legend" style="display:flex;gap:18px;flex-wrap:wrap;margin-top:10px;font-family:var(--mono);font-size:10.5px;letter-spacing:.05em;text-transform:uppercase">
-          <span><i style="display:inline-block;width:12px;height:12px;border-radius:50%;background:var(--red);vertical-align:middle;margin-right:6px"></i>Where the model is (confidence vs accuracy)</span>
-          <span><i style="display:inline-block;width:14px;height:3px;background:var(--green);vertical-align:middle;margin-right:6px"></i>SECL correction → toward the diagonal</span>
-          <span><i style="display:inline-block;width:14px;height:0;border-top:2px dashed var(--paper);vertical-align:middle;margin-right:6px"></i>Perfect calibration</span>
+          <span><i style="display:inline-block;width:12px;height:12px;background:var(--blue);vertical-align:middle;margin-right:6px"></i>Positive · signal higher → push confidence up</span>
+          <span><i style="display:inline-block;width:12px;height:12px;background:var(--red);vertical-align:middle;margin-right:6px"></i>Negative · overconfident → pull confidence down</span>
+          <span><i style="display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--green);vertical-align:middle;margin-right:6px"></i>Correct&nbsp;&nbsp;<i style="display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--red);vertical-align:middle;margin:0 6px"></i>Wrong</span>
         </div>
       </div>
 
@@ -384,7 +384,7 @@ footer a.link{color:var(--blue)}
 
       <div class="disclaim">
         <b>What this is and isn't</b>
-        No weights are updated in your browser, so this is <b>not</b> the calibrated end-model — reproducing the paper's full reliability curves needs the LoRA test-time training and thousands of questions. Instead the chart shows the <b>calibration gap and its direction</b>: each red dot is a confidence bin plotted against the accuracy the model actually achieved there (right of the diagonal = overconfident), and each green arrow is SECL's bounded directional correction (Eq. 4), conf → conf + α·clip(NormP(True) − conf, ±δ), pulling stated confidence back toward the diagonal. The verbalized confidence and the distractor-normalized NormP(True) signal use the paper's actual prompts (Appendix A); P(True) is read from token logprobs when the provider returns them, else from the True/False label. The per-question values are in the log. Your API key stays in your browser and is sent only to the provider you choose.
+        No weights are updated in your browser, so this is <b>not</b> the calibrated end-model — reproducing the paper's full reliability curves needs the LoRA test-time training and thousands of questions. Instead each bar is a single question, showing the <b>gap and its direction</b>: NormP(True) − stated confidence. A negative (red) bar means the model was overconfident and its own discriminative signal says pull confidence down; a positive (blue) bar means push it up. This per-question gap is exactly the signal SECL's directional update (Eq. 4) distills into LoRA weights. The verbalized confidence and distractor-normalized NormP(True) use the paper's actual prompts (Appendix A); P(True) is read from token logprobs when the provider returns them, else from the True/False label. Your API key stays in your browser and is sent only to the provider you choose.
       </div>
       <p class="note">Tip: OpenRouter works cleanly from the browser and can serve the exact paper models (Llama 3.2-3B, Gemma 2-2B, Phi-3.5, Llama 3.1-8B). If a provider blocks browser requests with a CORS error, switch to OpenRouter. TruthfulQA-style questions in the stream are where overconfidence shows most.</p>
     </div>
@@ -599,7 +599,7 @@ var els={
   reset:document.getElementById('resetDemo'),
   logbody:document.getElementById('logbody'),
   mAcc:document.getElementById('m-acc'),mConf:document.getElementById('m-conf'),mCorr:document.getElementById('m-corr'),
-  calibSvg:document.getElementById('calib-svg')
+  gapsSvg:document.getElementById('gaps-svg')
 };
 
 // restore remembered key
@@ -767,59 +767,40 @@ function eceFrom(pairs){ // pairs: [{p, y}]
   return {ece:ece, accs:accs};
 }
 function avg(a){return a.length?a.reduce(function(x,y){return x+y;},0)/a.length:null;}
-/* reliability square: stated confidence (x) vs actual accuracy (y); diagonal = perfect.
-   Red dots = where the model sits (right of diagonal = overconfident).
-   Green arrows = SECL's bounded correction (Eq. 4) pulling confidence toward the diagonal. */
-function drawCalib(svg, recs){
-  var X0=72,X1=400,Y0=300,Y1=24;
-  function px(c){return X0+Math.max(0,Math.min(1,c))*(X1-X0);}
-  function py(a){return Y0-Math.max(0,Math.min(1,a))*(Y0-Y1);}
+/* per-question diverging bars: gap = NormP(True) − stated confidence.
+   Up/blue = signal higher (push confidence up); down/red = overconfident (pull down).
+   Dot under each bar = correct (green) / wrong (red). */
+function drawGaps(svg, recs){
+  var X0=58,X1=662,TOP=34,BOT=258,MID=(TOP+BOT)/2,HH=(BOT-TOP)/2;
+  function gy(g){return MID - Math.max(-1,Math.min(1,g))*HH;}
   var parts=[];
   parts.push('<g stroke="rgba(239,233,220,.14)" stroke-width="1">');
-  for(var i=0;i<=4;i++){var gx=X0+(X1-X0)*i/4, gy=Y0-(Y0-Y1)*i/4;
-    parts.push('<line x1="'+gx+'" y1="'+Y1+'" x2="'+gx+'" y2="'+Y0+'"/>');
-    parts.push('<line x1="'+X0+'" y1="'+gy+'" x2="'+X1+'" y2="'+gy+'"/>');}
+  [-1,-0.5,0,0.5,1].forEach(function(v){var y=gy(v);
+    parts.push('<line x1="'+X0+'" y1="'+y+'" x2="'+X1+'" y2="'+y+'"'+(v===0?' stroke="var(--paper)" stroke-opacity=".5"':'')+'/>');
+    parts.push('<text x="'+(X0-8)+'" y="'+(y+4)+'" fill="var(--paper)" opacity=".55" font-family="Space Mono,monospace" font-size="10" text-anchor="end">'+(v>0?'+':'')+Math.round(v*100)+'</text>');
+  });
   parts.push('</g>');
-  parts.push('<line x1="'+px(0)+'" y1="'+py(0)+'" x2="'+px(1)+'" y2="'+py(1)+'" stroke="var(--paper)" stroke-width="1.4" stroke-dasharray="4 5" opacity=".55"/>');
-  parts.push('<text x="'+(X1-6)+'" y="'+(Y0-10)+'" fill="var(--red)" opacity=".75" font-family="Space Mono,monospace" font-size="9.5" text-anchor="end" letter-spacing="1">OVERCONFIDENT</text>');
-  parts.push('<text x="'+(X0+6)+'" y="'+(Y1+14)+'" fill="var(--blue)" opacity=".75" font-family="Space Mono,monospace" font-size="9.5" letter-spacing="1">UNDERCONFIDENT</text>');
-  parts.push('<text x="'+((X0+X1)/2)+'" y="'+(Y0+34)+'" fill="var(--paper)" opacity=".7" font-family="Space Mono,monospace" font-size="10" text-anchor="middle" letter-spacing="1">STATED CONFIDENCE →</text>');
-  parts.push('<text x="24" y="'+((Y0+Y1)/2)+'" fill="var(--paper)" opacity=".7" font-family="Space Mono,monospace" font-size="10" text-anchor="middle" letter-spacing="1" transform="rotate(-90 24 '+((Y0+Y1)/2)+')">ACTUAL ACCURACY →</text>');
+  parts.push('<text x="20" y="'+MID+'" fill="var(--paper)" opacity=".7" font-family="Space Mono,monospace" font-size="10" text-anchor="middle" transform="rotate(-90 20 '+MID+')">GAP · NormP(True) − conf (pts)</text>');
   if(recs.length){
-    var rs=recs.slice().sort(function(a,b){return a.conf-b.conf;});
-    var B=rs.length<6?1:Math.min(5,Math.floor(rs.length/3));
-    var bins=[];
-    for(var b=0;b<B;b++){
-      var lo=Math.floor(b*rs.length/B), hi=Math.floor((b+1)*rs.length/B);
-      var sl=rs.slice(lo,hi); if(!sl.length) continue;
-      bins.push({mc:avg(sl.map(function(r){return r.conf;})), ac:avg(sl.map(function(r){return r.correct?1:0;})), ma:avg(sl.map(function(r){return r.adj;}))});
-    }
-    bins.forEach(function(bn){ // faint gap line to the diagonal (x = accuracy)
-      parts.push('<line x1="'+px(bn.mc)+'" y1="'+py(bn.ac)+'" x2="'+px(bn.ac)+'" y2="'+py(bn.ac)+'" stroke="var(--red)" stroke-width="1" opacity=".3"/>');
-    });
-    if(bins.length>1){
-      parts.push('<path d="M'+bins.map(function(bn){return px(bn.mc).toFixed(1)+','+py(bn.ac).toFixed(1);}).join(' L')+'" fill="none" stroke="var(--red)" stroke-width="2" opacity=".9"/>');
-    }
-    bins.forEach(function(bn){
-      var x1=px(bn.mc), x2=px(bn.ma), y=py(bn.ac);
-      if(Math.abs(x2-x1)>4){
-        var dir=x2<x1?-1:1;
-        parts.push('<line x1="'+x1+'" y1="'+y+'" x2="'+(x2-dir*5)+'" y2="'+y+'" stroke="var(--green)" stroke-width="2.5"/>');
-        parts.push('<path d="M'+x2+','+y+' l'+(-dir*7)+',-4.5 l0,9 z" fill="var(--green)"/>');
-      }
-      parts.push('<circle cx="'+x1+'" cy="'+y+'" r="5" fill="var(--red)"/>');
+    var n=recs.length, slot=(X1-X0)/n, bw=Math.max(3,Math.min(24,slot*0.66));
+    recs.forEach(function(r,i){
+      var g=r.normPTrue-r.conf, x=X0+(i+0.5)*slot, y=gy(g), col=g<0?'var(--red)':'var(--blue)';
+      var top=Math.min(MID,y), h=Math.max(1,Math.abs(y-MID));
+      parts.push('<rect x="'+(x-bw/2).toFixed(1)+'" y="'+top.toFixed(1)+'" width="'+bw.toFixed(1)+'" height="'+h.toFixed(1)+'" fill="'+col+'" opacity="0.9"><title>'+r.item.d+' — stated '+(r.conf*100).toFixed(0)+'%, signal '+(r.normPTrue*100).toFixed(0)+'%, gap '+(g>=0?'+':'')+(g*100).toFixed(0)+' pts, '+(r.correct?'correct':'wrong')+'</title></rect>');
+      parts.push('<circle cx="'+x.toFixed(1)+'" cy="'+(BOT+14)+'" r="3" fill="'+(r.correct?'var(--green)':'var(--red)')+'"/>');
     });
   }
   svg.innerHTML=parts.join('');
 }
 function refresh(){
-  drawCalib(els.calibSvg, records);
+  drawGaps(els.gapsSvg, records);
   var acc=avg(records.map(function(r){return r.correct?1:0;}));
   var mc=avg(records.map(function(r){return r.conf;}));
+  var gp=avg(records.map(function(r){return r.normPTrue-r.conf;}));
   var pct=function(x){return x===null?'—':Math.round(x*100)+'%';};
   els.mAcc.textContent=pct(acc);
   els.mConf.textContent=pct(mc);
-  els.mCorr.textContent=(acc===null||mc===null)?'—':((mc-acc>=0?'+':'')+Math.round((mc-acc)*100)+' pts');
+  els.mCorr.textContent=gp===null?'—':((gp>=0?'+':'')+Math.round(gp*100)+' pts');
 }
 function clearPlaceholder(){ if(els.logbody.querySelector('td[colspan]')) els.logbody.innerHTML=''; }
 function logRow(r){
@@ -857,7 +838,7 @@ async function go(items){
       els.status.classList.add('err');
       els.status.textContent='All '+failed+' responses were unparsed — the model returned no valid JSON. Example: '+lastRaw+'  ·  Try a stronger model (e.g. Gemini 2.0 Flash) or a different provider.';
     } else {
-      els.status.textContent='Done. '+records.length+' parsed'+(failed?(' · '+failed+' unparsed'):'')+'. Red dots sit right of the diagonal — the model is overconfident. The green arrows are SECL\'s bounded correction (Eq. 4) pulling stated confidence back toward the diagonal.';
+      els.status.textContent='Done. '+records.length+' parsed'+(failed?(' · '+failed+' unparsed'):'')+'. Each bar is one question: red bars (gap < 0) are where the model was overconfident and its own P(True) says pull confidence down; that is the directional signal SECL distills.';
     }
   }catch(err){
     els.status.classList.add('err');
@@ -871,11 +852,11 @@ els.reset.onclick=function(){
   records=[]; oneIdx=0;
   els.logbody.innerHTML='<tr><td colspan="7" style="opacity:.5">No runs yet.</td></tr>';
   els.mAcc.textContent='—';els.mConf.textContent='—';els.mCorr.textContent='—';
-  drawCalib(els.calibSvg, []);
+  drawGaps(els.gapsSvg, []);
   els.status.textContent='Reset. Ready to run.';
 };
-// init empty calibration chart
-drawCalib(els.calibSvg, []);
+// init empty gap chart
+drawGaps(els.gapsSvg, []);
 })();
 </script>
 </body>
