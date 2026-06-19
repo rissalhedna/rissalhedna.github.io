@@ -648,14 +648,22 @@ async function askModel(system, user){
     return (j.content||[]).filter(function(b){return b.type==='text';}).map(function(b){return b.text;}).join('\n');
   } else {
     var base=els.base.value.trim().replace(/\/$/,'');
-    var r2=await fetch(base+'/chat/completions',{
-      method:'POST',
-      headers:{'content-type':'application/json','Authorization':'Bearer '+key},
-      body:JSON.stringify({model:model,temperature:0,max_tokens:400,messages:[{role:'system',content:system},{role:'user',content:user}]})
-    });
+    function call(useJson){
+      var body={model:model,temperature:0,max_tokens:400,messages:[{role:'system',content:system},{role:'user',content:user}]};
+      if(useJson) body.response_format={type:'json_object'};
+      return fetch(base+'/chat/completions',{
+        method:'POST',
+        headers:{'content-type':'application/json','Authorization':'Bearer '+key},
+        body:JSON.stringify(body)
+      });
+    }
+    var r2=await call(true);
+    if(r2.status===400) r2=await call(false); // provider may not support JSON mode
     if(!r2.ok){var t2=await r2.text();throw new Error('API '+r2.status+': '+t2.slice(0,160));}
     var j2=await r2.json();
-    return j2.choices&&j2.choices[0]&&j2.choices[0].message?j2.choices[0].message.content:'';
+    if(!j2.choices||!j2.choices[0]) throw new Error('API returned no choices: '+JSON.stringify(j2).slice(0,200));
+    var msg=j2.choices[0].message||{};
+    return msg.content||msg.reasoning_content||'';
   }
 }
 
@@ -670,9 +678,10 @@ async function runQuestion(item){
   var gtxt=await askModel(genSys,genUser);
   var g=extractJSON(gtxt)||{};
   var ans=(''+(g.answer||'')).trim().toUpperCase().replace(/[^A-D]/g,'').slice(0,1);
-  if(!ans){ var m=gtxt&&gtxt.match(/\b([A-D])\b/); ans=m?m[1]:optKeys[0]; }
+  if(!ans){ var m=gtxt&&gtxt.match(/\b([A-D])\b/); if(m)ans=m[1]; }
   var conf=parseFloat(g.confidence);
-  if(isNaN(conf)){ var cm=gtxt&&gtxt.match(/(\d{1,3})\s*%?/); conf=cm?parseFloat(cm[1]):70; }
+  if(isNaN(conf)){ var cm=gtxt&&gtxt.match(/(\d{1,3})\s*%?/); if(cm)conf=parseFloat(cm[1]); }
+  if(!ans||isNaN(conf)) return {failed:true, item:item, raw:'GEN: '+(gtxt||'(empty)').slice(0,140)};
   conf=Math.max(0,Math.min(100,conf))/100;
 
   // 2) discrimination: P(correct) for each option
@@ -682,11 +691,12 @@ async function runQuestion(item){
   var d=extractJSON(dtxt)||{};
   var tau=Math.max(0.1,parseFloat(els.tau.value)||0.7);
   // softmax over distractors: s_i = exp(p_i/tau)
-  var scores={}, denom=0;
+  var scores={}, denom=0, parsed=0;
   optKeys.forEach(function(k){
-    var p=parseFloat(d[k]); if(isNaN(p))p=0; p=Math.max(0,Math.min(100,p))/100;
+    var p=parseFloat(d[k]); if(isNaN(p))p=0; else parsed++; p=Math.max(0,Math.min(100,p))/100;
     var s=Math.exp(p/tau); scores[k]=s; denom+=s;
   });
+  if(parsed===0) return {failed:true, item:item, raw:'DISC: '+(dtxt||'(empty)').slice(0,140)};
   var normPTrue = denom>0 ? (scores[ans]/denom) : (1/optKeys.length);
 
   // 3) directional target (Eq. 4)
@@ -728,8 +738,9 @@ function refresh(){
   var gap=records.length?records.reduce(function(a,r){return a+Math.abs(r.conf-r.normPTrue);},0)/records.length:null;
   els.mGap.textContent=gap===null?'—':gap.toFixed(3);
 }
+function clearPlaceholder(){ if(els.logbody.querySelector('td[colspan]')) els.logbody.innerHTML=''; }
 function logRow(r){
-  if(records.length===1) els.logbody.innerHTML='';
+  clearPlaceholder();
   var tr=document.createElement('tr');
   var okHtml=r.correct?'<span class="ok">✓</span>':'<span class="no">✗</span>';
   var gate=r.gated?'<span class="skip">skip</span>':'update';
@@ -738,19 +749,33 @@ function logRow(r){
     +'<td>'+(r.normPTrue*100).toFixed(0)+'%</td><td>'+gate+'</td><td>'+(r.adj*100).toFixed(0)+'%</td>';
   els.logbody.appendChild(tr);
 }
+function logFailRow(r){
+  clearPlaceholder();
+  var tr=document.createElement('tr');
+  tr.innerHTML='<td>'+r.item.d+' · '+r.item.q.slice(0,46)+(r.item.q.length>46?'…':'')+'</td>'
+    +'<td colspan="6" style="color:var(--red);opacity:.85">unparsed · '+r.raw.replace(/</g,'&lt;')+'</td>';
+  els.logbody.appendChild(tr);
+}
 
 function setBusy(b){els.runAll.disabled=b;els.runOne.disabled=b;els.runAll.style.opacity=b?.5:1;els.runOne.style.opacity=b?.5:1;}
 var oneIdx=0;
 
 async function go(items){
   setBusy(true); els.status.classList.remove('err');
+  var failed=0, lastRaw='';
   try{
     for(var i=0;i<items.length;i++){
       els.status.textContent='Running '+(i+1)+' / '+items.length+'  ·  '+items[i].d+' question…';
       var rec=await runQuestion(items[i]);
-      records.push(rec); logRow(rec); refresh();
+      if(rec.failed){ failed++; lastRaw=rec.raw; logFailRow(rec); }
+      else { records.push(rec); logRow(rec); refresh(); }
     }
-    els.status.textContent='Done. '+records.length+' question'+(records.length>1?'s':'')+' total. The NormP(True) bars (right) sit closer to the diagonal — that is the better-calibrated signal SECL distills into the weights.';
+    if(records.length===0){
+      els.status.classList.add('err');
+      els.status.textContent='All '+failed+' responses were unparsed — the model returned no valid JSON. Example: '+lastRaw+'  ·  Try a stronger model (e.g. Gemini 2.0 Flash) or a different provider.';
+    } else {
+      els.status.textContent='Done. '+records.length+' parsed'+(failed?(' · '+failed+' unparsed'):'')+'. The NormP(True) bars (right) sit closer to the diagonal — the better-calibrated signal SECL distills into the weights.';
+    }
   }catch(err){
     els.status.classList.add('err');
     els.status.textContent='Error: '+err.message+'  ·  If this is CORS, switch the provider to OpenRouter.';
