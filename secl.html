@@ -385,7 +385,7 @@ footer a.link{color:var(--blue)}
 
       <div class="disclaim">
         <b>What this is and isn't</b>
-        No weights are updated in your browser. The right-hand curve plots <b>NormP(True)</b> (Eq. 3) — the distractor-normalized discriminative signal that SECL distills into LoRA weights so the model emits it natively in a single forward pass. Here it is computed live as a label-free, inference-time estimate; the per-question directional target ĉ (Eq. 4) is shown in the log. Confidence and P(True) are elicited in text rather than read from token logprobs, so values approximate the paper's signals and a short run of questions is noisier than the paper's 2,000-question stream. Your API key stays in your browser and is sent only to the provider you choose.
+        No weights are updated in your browser. This uses the paper's actual prompts (Appendix A): the Main QA + confidence-bin prompt for the verbalized signal, and the True/False P(True) verification probe over the answer plus its distractors. P(True) is read from the model's token logprobs when the provider returns them (otherwise it falls back to the True/False label, which is coarser). The right-hand curve plots <b>NormP(True)</b> (Eq. 3) — the discriminative signal SECL distills into LoRA weights so the model emits it natively in one forward pass; the per-question directional target ĉ (Eq. 4) is shown in the log. A short run is noisier than the paper's 2,000-question stream. Your API key stays in your browser and is sent only to the provider you choose.
       </div>
       <p class="note">Tip: OpenRouter works cleanly from the browser and can serve the exact paper models (Llama 3.2-3B, Gemma 2-2B, Phi-3.5, Llama 3.1-8B). If a provider blocks browser requests with a CORS error, switch to OpenRouter. TruthfulQA-style questions in the stream are where overconfidence shows most.</p>
     </div>
@@ -624,16 +624,10 @@ els.remember.addEventListener('change',function(){
   try{ if(els.remember.checked) localStorage.setItem('secl_key',els.key.value); else localStorage.removeItem('secl_key'); }catch(e){}
 });
 
-/* ---- provider call ---- */
-function extractJSON(txt){
-  if(!txt) return null;
-  var t=txt.replace(/```json/gi,'').replace(/```/g,'').trim();
-  var a=t.indexOf('{'), b=t.lastIndexOf('}');
-  if(a>=0&&b>a){ try{return JSON.parse(t.slice(a,b+1));}catch(e){} }
-  try{return JSON.parse(t);}catch(e){return null;}
-}
-
-async function askModel(system, user){
+/* ---- provider call ----
+   Returns {text, first}. `first` is the per-token top_logprobs (as {tok,p}) for the
+   first few generated tokens, used to read P(True) from the token distribution. */
+async function chat(system, user, wantLogprobs){
   var provider=els.provider.value, key=els.key.value.trim(), model=els.model.value.trim();
   if(!key) throw new Error("Add your API key first.");
   if(!model) throw new Error("Add a model id first.");
@@ -641,75 +635,124 @@ async function askModel(system, user){
     var r=await fetch('https://api.anthropic.com/v1/messages',{
       method:'POST',
       headers:{'content-type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-      body:JSON.stringify({model:model,max_tokens:400,system:system,messages:[{role:'user',content:user}]})
+      body:JSON.stringify({model:model,max_tokens:wantLogprobs?6:512,system:system,messages:[{role:'user',content:user}]})
     });
     if(!r.ok){var t=await r.text();throw new Error('Anthropic '+r.status+': '+t.slice(0,160));}
     var j=await r.json();
-    return (j.content||[]).filter(function(b){return b.type==='text';}).map(function(b){return b.text;}).join('\n');
-  } else {
-    var base=els.base.value.trim().replace(/\/$/,'');
-    function call(useJson){
-      var body={model:model,temperature:0,max_tokens:400,messages:[{role:'system',content:system},{role:'user',content:user}]};
-      if(useJson) body.response_format={type:'json_object'};
-      return fetch(base+'/chat/completions',{
-        method:'POST',
-        headers:{'content-type':'application/json','Authorization':'Bearer '+key},
-        body:JSON.stringify(body)
-      });
-    }
-    var r2=await call(true);
-    if(r2.status===400) r2=await call(false); // provider may not support JSON mode
-    if(!r2.ok){var t2=await r2.text();throw new Error('API '+r2.status+': '+t2.slice(0,160));}
-    var j2=await r2.json();
-    if(!j2.choices||!j2.choices[0]) throw new Error('API returned no choices: '+JSON.stringify(j2).slice(0,200));
-    var msg=j2.choices[0].message||{};
-    return msg.content||msg.reasoning_content||'';
+    var atxt=(j.content||[]).filter(function(b){return b.type==='text';}).map(function(b){return b.text;}).join('\n');
+    return {text:atxt, first:null}; // this API does not expose token logprobs here
   }
+  var base=els.base.value.trim().replace(/\/$/,'');
+  function call(useLogprobs){
+    var body={model:model,temperature:0,max_tokens:wantLogprobs?6:512,messages:[{role:'system',content:system},{role:'user',content:user}]};
+    if(useLogprobs){ body.logprobs=true; body.top_logprobs=20; }
+    return fetch(base+'/chat/completions',{
+      method:'POST',
+      headers:{'content-type':'application/json','Authorization':'Bearer '+key},
+      body:JSON.stringify(body)
+    });
+  }
+  var r2=await call(!!wantLogprobs);
+  if(r2.status===400 && wantLogprobs) r2=await call(false); // provider may not support logprobs
+  if(!r2.ok){var t2=await r2.text();throw new Error('API '+r2.status+': '+t2.slice(0,160));}
+  var j2=await r2.json();
+  if(!j2.choices||!j2.choices[0]) throw new Error('API returned no choices: '+JSON.stringify(j2).slice(0,200));
+  var msg=j2.choices[0].message||{};
+  var text=msg.content||msg.reasoning_content||'';
+  var first=null, lp=j2.choices[0].logprobs;
+  if(lp&&lp.content&&lp.content.length){
+    first=lp.content.slice(0,4).map(function(tk){return (tk.top_logprobs||[]).map(function(o){return {tok:o.token, p:Math.exp(o.logprob)};});});
+  }
+  return {text:text, first:first};
 }
 
-/* ---- one question ---- */
+/* ---- paper prompt library (Appendix A) ---- */
+function confidenceBullets(){
+  var b=[]; for(var k=0;k<10;k++) b.push('- bin'+k+'. - you are ~'+(k*10)+'-'+(k*10+10)+'% confident your final answer is correct');
+  return b.join('\n');
+}
+var QA_SYS="You are a careful assistant answering a question to the best of your knowledge.";
+function qaUser(question){
+  return "Your task is to answer the question based on factual information in your own knowledge.\n\n"
+    +"Please adhere to the following guidelines when formulating the answer:\n"
+    +"You must rate how confident you are that your final answer is correct using one of these categories:\n"
+    +confidenceBullets()+"\n\n"
+    +"IMPORTANT: Keep your reasoning BRIEF (1-2 sentences maximum). Then provide the final answer with your confidence level. The reasoning process must be enclosed within <think> </think> tags.\n"
+    +"Do not add anything after the final answer.\n\n"
+    +"Format:\n<think>Your brief reasoning here (1-2 sentences max)</think>\nAnswer: <your answer>\nConfidence: <confidence level>\n\n"
+    +"For example:\nQuestion: What is the capital of France?\n<think>Paris is the capital of France.</think>\nAnswer: Paris.\nConfidence: bin9.\n\n"
+    +"Now answer the following question:\nQuestion: "+question;
+}
+var PT_SYS="You are a careful verifier judging whether an answer is correct.";
+function ptUser(question, candidates, reasoning, finalAnswer){
+  var cs="Here are some brainstormed answers:\n"+candidates.map(function(c,i){return (i+1)+". "+c;}).join('\n')+"\n";
+  return cs+"Question: "+question+"\nProposed Solution:\n"+(reasoning||finalAnswer)+"\nFinal Answer: "+finalAnswer+"\nIs this answer correct? Please respond with only \"True\" or \"False\".";
+}
+
+/* parse the free-text QA reply (Answer / Confidence: bin<k> / <think>) */
+function parseQA(text, item){
+  if(!text) return null;
+  var optKeys=Object.keys(item.opts), conf=null;
+  var mb=text.match(/Confidence:\s*bin\s*([0-9])/i);
+  if(mb) conf=(parseInt(mb[1],10)+0.5)/10;
+  else { var mp=text.match(/Confidence:[^0-9]*([0-9]{1,3})/i); if(mp) conf=Math.max(0,Math.min(100,parseFloat(mp[1])))/100; }
+  var reasoning=''; var mt=text.match(/<think>([\s\S]*?)<\/think>/i); if(mt) reasoning=mt[1].trim();
+  var atext=null; var ma=text.match(/Answer:\s*([^\n]+)/i); if(ma) atext=ma[1].trim();
+  var letter=null;
+  if(atext){
+    var ml=atext.match(/\b([A-D])\b/); if(ml) letter=ml[1].toUpperCase();
+    if(!letter){ for(var i=0;i<optKeys.length;i++){ var ov=item.opts[optKeys[i]].toLowerCase(); if(ov&&atext.toLowerCase().indexOf(ov)>=0){letter=optKeys[i];break;} } }
+  }
+  if(!letter){ var mw=text.match(/\b([A-D])\b/); if(mw) letter=mw[1].toUpperCase(); }
+  if(!letter||conf===null) return null;
+  return {letter:letter, conf:conf, reasoning:reasoning||atext||''};
+}
+
+/* read P(True) from the True/False token distribution; fall back to the text label */
+function readPTrue(probe){
+  if(probe.first){
+    for(var i=0;i<probe.first.length;i++){
+      var pT=0,pF=0;
+      probe.first[i].forEach(function(o){var t=(o.tok||'').trim().toLowerCase();
+        if(t.indexOf('true')===0)pT+=o.p; else if(t.indexOf('false')===0)pF+=o.p;});
+      if(pT+pF>0) return pT/(pT+pF);
+    }
+  }
+  if(probe.text){ var m=probe.text.match(/\b(true|false)\b/i); if(m) return /true/i.test(m[1])?0.85:0.15; }
+  return null;
+}
+
+/* ---- one question (paper pipeline) ---- */
 async function runQuestion(item){
   var optKeys=Object.keys(item.opts);
-  var optText=optKeys.map(function(k){return k+") "+item.opts[k];}).join("\n");
+  var candidates=optKeys.map(function(k){return item.opts[k];});
+  var qWithOpts=item.q+"\nOptions:\n"+optKeys.map(function(k){return k+") "+item.opts[k];}).join("\n");
 
-  // 1) generation + verbalized confidence
-  var genSys="You are taking a multiple-choice test. Answer with the single best option letter, then rate how confident you are that your answer is correct. Reply ONLY as JSON.";
-  var genUser="Question: "+item.q+"\nOptions:\n"+optText+'\n\nReturn JSON: {"answer":"<letter>","confidence":<integer 0-100>}';
-  var gtxt=await askModel(genSys,genUser);
-  var g=extractJSON(gtxt)||{};
-  var ans=(''+(g.answer||'')).trim().toUpperCase().replace(/[^A-D]/g,'').slice(0,1);
-  if(!ans){ var m=gtxt&&gtxt.match(/\b([A-D])\b/); if(m)ans=m[1]; }
-  var conf=parseFloat(g.confidence);
-  if(isNaN(conf)){ var cm=gtxt&&gtxt.match(/(\d{1,3})\s*%?/); if(cm)conf=parseFloat(cm[1]); }
-  if(!ans||isNaN(conf)) return {failed:true, item:item, raw:'GEN: '+(gtxt||'(empty)').slice(0,140)};
-  conf=Math.max(0,Math.min(100,conf))/100;
+  // 1) Main QA + verbalized confidence (Prompt 1)
+  var qa=await chat(QA_SYS, qaUser(qWithOpts), false);
+  var p=parseQA(qa.text, item);
+  if(!p) return {failed:true, item:item, raw:'GEN: '+(qa.text||'(empty)').slice(0,140)};
+  var ans=p.letter, conf=p.conf;
 
-  // 2) discrimination: P(correct) for each option
-  var discSys="You judge whether candidate answers to a question are correct. For each candidate, give an independent probability from 0 to 100 that it is the correct answer. Be critical: most candidates are wrong. Reply ONLY as JSON.";
-  var discUser="Question: "+item.q+"\nCandidates:\n"+optText+'\n\nReturn JSON mapping each letter to a probability, e.g. {"A":12,"B":80,"C":5,"D":3}';
-  var dtxt=await askModel(discSys,discUser);
-  var d=extractJSON(dtxt)||{};
+  // 2) P(True) verification per candidate (Prompt 6) -> NormP(True) (Eq. 3)
+  var probes=await Promise.all(optKeys.map(function(k){
+    return chat(PT_SYS, ptUser(item.q, candidates, p.reasoning, item.opts[k]), true);
+  }));
   var tau=Math.max(0.1,parseFloat(els.tau.value)||0.7);
-  // softmax over distractors: s_i = exp(p_i/tau)
-  var scores={}, denom=0, parsed=0;
-  optKeys.forEach(function(k){
-    var p=parseFloat(d[k]); if(isNaN(p))p=0; else parsed++; p=Math.max(0,Math.min(100,p))/100;
-    var s=Math.exp(p/tau); scores[k]=s; denom+=s;
-  });
-  if(parsed===0) return {failed:true, item:item, raw:'DISC: '+(dtxt||'(empty)').slice(0,140)};
+  var pt={}, gotAny=false;
+  optKeys.forEach(function(k,i){ var v=readPTrue(probes[i]); if(v!=null) gotAny=true; pt[k]=(v==null?0.5:v); });
+  if(!gotAny) return {failed:true, item:item, raw:'DISC: '+((probes[0]&&probes[0].text)||'(empty)').slice(0,140)};
+  var scores={}, denom=0;
+  optKeys.forEach(function(k){ var s=Math.exp(pt[k]/tau); scores[k]=s; denom+=s; });
   var normPTrue = denom>0 ? (scores[ans]/denom) : (1/optKeys.length);
 
-  // 3) directional target (Eq. 4)
+  // 3) directional target (Eq. 4) + bin gate
   var raw=normPTrue-conf, clip=Math.max(-delta,Math.min(delta,raw)), adj=conf+alpha*clip;
-  // bin gate
   var binC=Math.min(9,Math.floor(conf*10)), binS=Math.min(9,Math.floor(normPTrue*10));
-  var gated=Math.abs(binC-binS)<=1; // skip update if already agree
+  var gated=Math.abs(binC-binS)<=1;
   var finalAdj = gated ? conf : adj;
 
-  return {
-    item:item, answer:ans, correct:(ans===item.correct), conf:conf,
-    normPTrue:normPTrue, gated:gated, adj:finalAdj
-  };
+  return { item:item, answer:ans, correct:(ans===item.correct), conf:conf, normPTrue:normPTrue, gated:gated, adj:finalAdj };
 }
 
 /* ---- accumulation + metrics ---- */
