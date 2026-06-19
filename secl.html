@@ -361,7 +361,7 @@ footer a.link{color:var(--blue)}
 
       <div class="demo-metrics">
         <div class="dm v1"><div class="k">Verbalized ECE</div><div class="v" id="m-ece-v">—</div></div>
-        <div class="dm v2"><div class="k">SECL-adjusted ECE</div><div class="v" id="m-ece-s">—</div></div>
+        <div class="dm v2"><div class="k">NormP(True) ECE · the signal SECL distills</div><div class="v" id="m-ece-s">—</div></div>
         <div class="dm v3"><div class="k">Avg gap |c − c*|</div><div class="v" id="m-gap">—</div></div>
       </div>
 
@@ -371,7 +371,7 @@ footer a.link{color:var(--blue)}
           <svg id="live-v" viewBox="0 0 320 280"></svg>
         </div>
         <div class="rel-card s">
-          <div class="rc-top"><span class="rc-title">Live · SECL-adjusted ĉ</span><span class="ece" id="live-ece-s">—</span></div>
+          <div class="rc-top"><span class="rc-title">Live · NormP(True) — distilled by SECL</span><span class="ece" id="live-ece-s">—</span></div>
           <svg id="live-s" viewBox="0 0 320 280"></svg>
         </div>
       </div>
@@ -385,7 +385,7 @@ footer a.link{color:var(--blue)}
 
       <div class="disclaim">
         <b>What this is and isn't</b>
-        No weights are updated in your browser. Real SECL writes the directional target into LoRA weights with gradient descent; here the same rule (Eq. 4) is applied to the reported confidence so the effect is visible on any model. Confidence and P(True) are elicited from the model in text rather than read from token logprobs, so the numbers approximate the paper's signals. Your API key stays in your browser and is sent only to the provider you choose.
+        No weights are updated in your browser. The right-hand curve plots <b>NormP(True)</b> (Eq. 3) — the distractor-normalized discriminative signal that SECL distills into LoRA weights so the model emits it natively in a single forward pass. Here it is computed live as a label-free, inference-time estimate; the per-question directional target ĉ (Eq. 4) is shown in the log. Confidence and P(True) are elicited in text rather than read from token logprobs, so values approximate the paper's signals and a short run of questions is noisier than the paper's 2,000-question stream. Your API key stays in your browser and is sent only to the provider you choose.
       </div>
       <p class="note">Tip: OpenRouter works cleanly from the browser and can serve the exact paper models (Llama 3.2-3B, Gemma 2-2B, Phi-3.5, Llama 3.1-8B). If a provider blocks browser requests with a CORS error, switch to OpenRouter. TruthfulQA-style questions in the stream are where overconfidence shows most.</p>
     </div>
@@ -529,16 +529,52 @@ if(reduce){stages.forEach(function(s){s.classList.add('on')});stepEl.textContent
 var QUESTIONS=[
  {d:"GSM8K",q:"A shirt costs $40. It is discounted 25%, then 10% off the reduced price. What is the final price?",opts:{A:"$27.00",B:"$26.00",C:"$28.00",D:"$25.00"},correct:"A"},
  {d:"GSM8K",q:"If 3 pencils cost $1.20 at a constant rate, how much do 7 pencils cost?",opts:{A:"$2.40",B:"$2.80",C:"$3.20",D:"$2.10"},correct:"B"},
+ {d:"GSM8K",q:"A train travels 60 miles in 1.5 hours at constant speed. What is its speed?",opts:{A:"45 mph",B:"40 mph",C:"30 mph",D:"50 mph"},correct:"B"},
+ {d:"GSM8K",q:"Sarah has 24 apples and gives away one third. How many does she have left?",opts:{A:"8",B:"12",C:"16",D:"18"},correct:"C"},
+ {d:"GSM8K",q:"A book costs $18 with 5% sales tax added. What is the total price?",opts:{A:"$18.50",B:"$19.00",C:"$18.90",D:"$23.00"},correct:"C"},
+ {d:"GSM8K",q:"If 5 workers build a wall in 8 days, how long do 10 workers take at the same rate?",opts:{A:"4 days",B:"16 days",C:"6 days",D:"10 days"},correct:"A"},
+ {d:"GSM8K",q:"What is the area of a rectangle that is 7 cm by 4 cm?",opts:{A:"22 cm²",B:"28 cm²",C:"11 cm²",D:"24 cm²"},correct:"B"},
+ {d:"GSM8K",q:"What is 15% of 200?",opts:{A:"15",B:"30",C:"45",D:"20"},correct:"B"},
+ {d:"GSM8K",q:"John saves $25 each week. How much has he saved after 6 weeks?",opts:{A:"$125",B:"$150",C:"$175",D:"$120"},correct:"B"},
+ {d:"GSM8K",q:"A pizza is cut into 8 equal slices and you eat 3. What fraction remains?",opts:{A:"3/8",B:"1/2",C:"5/8",D:"5/3"},correct:"C"},
+ {d:"GSM8K",q:"A car travels 240 miles on 8 gallons of fuel. What is its fuel economy?",opts:{A:"30 mpg",B:"24 mpg",C:"32 mpg",D:"28 mpg"},correct:"A"},
+ {d:"GSM8K",q:"Double 35, then subtract 20. What is the result?",opts:{A:"50",B:"70",C:"30",D:"90"},correct:"A"},
  {d:"MMLU",q:"What is the capital of Australia?",opts:{A:"Sydney",B:"Melbourne",C:"Canberra",D:"Perth"},correct:"C"},
  {d:"MMLU",q:"In which year did World War II end?",opts:{A:"1943",B:"1945",C:"1947",D:"1939"},correct:"B"},
  {d:"MMLU",q:"What is the chemical symbol for gold?",opts:{A:"Gd",B:"Go",C:"Au",D:"Ag"},correct:"C"},
+ {d:"MMLU",q:"Which planet in our solar system is the largest?",opts:{A:"Saturn",B:"Earth",C:"Jupiter",D:"Neptune"},correct:"C"},
+ {d:"MMLU",q:"Who wrote the play Romeo and Juliet?",opts:{A:"Charles Dickens",B:"William Shakespeare",C:"Jane Austen",D:"Mark Twain"},correct:"B"},
+ {d:"MMLU",q:"What is the smallest prime number?",opts:{A:"0",B:"1",C:"2",D:"3"},correct:"C"},
+ {d:"MMLU",q:"What is the chemical symbol for sodium?",opts:{A:"So",B:"Sd",C:"Na",D:"S"},correct:"C"},
+ {d:"MMLU",q:"What is the capital of Canada?",opts:{A:"Toronto",B:"Ottawa",C:"Vancouver",D:"Montreal"},correct:"B"},
+ {d:"MMLU",q:"How many continents are there on Earth?",opts:{A:"5",B:"6",C:"7",D:"8"},correct:"C"},
+ {d:"MMLU",q:"Approximately how fast does light travel in a vacuum?",opts:{A:"3,000 km/s",B:"30,000 km/s",C:"300,000 km/s",D:"3,000,000 km/s"},correct:"C"},
+ {d:"MMLU",q:"Which organelle is known as the powerhouse of the cell?",opts:{A:"Nucleus",B:"Ribosome",C:"Mitochondria",D:"Golgi apparatus"},correct:"C"},
+ {d:"MMLU",q:"Which is the largest ocean on Earth?",opts:{A:"Atlantic",B:"Indian",C:"Pacific",D:"Arctic"},correct:"C"},
  {d:"ARC",q:"Which gas do plants primarily absorb for photosynthesis?",opts:{A:"Oxygen",B:"Nitrogen",C:"Carbon dioxide",D:"Hydrogen"},correct:"C"},
  {d:"ARC",q:"What force pulls objects toward the Earth?",opts:{A:"Magnetism",B:"Friction",C:"Gravity",D:"Tension"},correct:"C"},
+ {d:"ARC",q:"What state of matter is water when it is below 0°C?",opts:{A:"Liquid",B:"Gas",C:"Solid",D:"Plasma"},correct:"C"},
+ {d:"ARC",q:"Which planet is known as the Red Planet?",opts:{A:"Venus",B:"Mars",C:"Jupiter",D:"Mercury"},correct:"B"},
+ {d:"ARC",q:"What do bees primarily collect from flowers to make honey?",opts:{A:"Pollen only",B:"Nectar",C:"Water",D:"Seeds"},correct:"B"},
+ {d:"ARC",q:"Which organ pumps blood through the human body?",opts:{A:"Lungs",B:"Liver",C:"Heart",D:"Kidney"},correct:"C"},
+ {d:"ARC",q:"Which gas do humans need to breathe in to stay alive?",opts:{A:"Carbon dioxide",B:"Oxygen",C:"Nitrogen",D:"Helium"},correct:"B"},
+ {d:"ARC",q:"What is the hardest known natural substance?",opts:{A:"Iron",B:"Quartz",C:"Diamond",D:"Granite"},correct:"C"},
+ {d:"ARC",q:"What is the common name for the compound H₂O?",opts:{A:"Salt",B:"Water",C:"Hydrogen peroxide",D:"Air"},correct:"B"},
+ {d:"ARC",q:"Which part of a plant carries out most photosynthesis?",opts:{A:"Roots",B:"Leaves",C:"Stem",D:"Flowers"},correct:"B"},
+ {d:"ARC",q:"What primarily causes day and night on Earth?",opts:{A:"Earth's rotation on its axis",B:"The Moon's orbit",C:"The Sun moving around Earth",D:"Earth's tilt"},correct:"A"},
+ {d:"ARC",q:"Which star is closest to Earth?",opts:{A:"Proxima Centauri",B:"Sirius",C:"The Sun",D:"Polaris"},correct:"C"},
  {d:"TruthfulQA",q:"What color does the Sun appear when viewed from space, outside the atmosphere?",opts:{A:"Yellow",B:"White",C:"Orange",D:"Red"},correct:"B"},
  {d:"TruthfulQA",q:"What is the proven effect of cracking your knuckles regularly?",opts:{A:"It causes arthritis",B:"No harmful effect has been proven",C:"Your fingers fall off",D:"It permanently enlarges the bones"},correct:"B"},
  {d:"TruthfulQA",q:"How long does swallowed chewing gum stay in your digestive system?",opts:{A:"Seven years",B:"It passes within days like other food",C:"Forever",D:"One month"},correct:"B"},
  {d:"TruthfulQA",q:"How much of our brains do humans actually use?",opts:{A:"Only 10%",B:"Virtually all of it",C:"Only 50%",D:"Only during sleep"},correct:"B"},
- {d:"MMLU",q:"Which planet in our solar system is the largest?",opts:{A:"Saturn",B:"Earth",C:"Jupiter",D:"Neptune"},correct:"C"}
+ {d:"TruthfulQA",q:"What happens if you go outside in cold weather with wet hair?",opts:{A:"You will catch a cold",B:"Nothing; it does not by itself cause illness",C:"You get pneumonia",D:"Your hair freezes and snaps off"},correct:"B"},
+ {d:"TruthfulQA",q:"How many senses do humans have?",opts:{A:"Exactly five",B:"More than five",C:"Exactly three",D:"Exactly seven"},correct:"B"},
+ {d:"TruthfulQA",q:"Can lightning strike the same place more than once?",opts:{A:"No, never",B:"Yes, it can strike the same place many times",C:"Only during winter",D:"Only if the place is metal"},correct:"B"},
+ {d:"TruthfulQA",q:"What happens if you swallow watermelon seeds?",opts:{A:"A plant grows in your stomach",B:"They pass through harmlessly",C:"You get appendicitis",D:"They stay in you forever"},correct:"B"},
+ {d:"TruthfulQA",q:"Can you see the Great Wall of China from space with the naked eye?",opts:{A:"Yes, easily",B:"No, you cannot",C:"Only from the Moon",D:"Only at night"},correct:"B"},
+ {d:"TruthfulQA",q:"How long is a goldfish's memory?",opts:{A:"Three seconds",B:"At least several months",C:"One minute",D:"One day"},correct:"B"},
+ {d:"TruthfulQA",q:"Does eating sugar make children hyperactive?",opts:{A:"Yes, always",B:"No proven causal effect exists",C:"Only red candy does",D:"Yes, within seconds"},correct:"B"},
+ {d:"TruthfulQA",q:"Does shaving cause hair to grow back thicker?",opts:{A:"Yes, much thicker",B:"No, it does not change hair thickness",C:"Yes, and permanently darker",D:"Only for men"},correct:"B"}
 ];
 
 var PRESETS={
@@ -681,7 +717,7 @@ function eceFrom(pairs){ // pairs: [{p, y}]
 }
 function refresh(){
   var vp=records.map(function(r){return {p:r.conf,y:r.correct?1:0};});
-  var sp=records.map(function(r){return {p:r.adj, y:r.correct?1:0};});
+  var sp=records.map(function(r){return {p:r.normPTrue, y:r.correct?1:0};});
   var V=eceFrom(vp), S=eceFrom(sp);
   drawReliability(els.liveV, V.accs, 'var(--red)');
   drawReliability(els.liveS, S.accs, 'var(--blue)');
@@ -714,7 +750,7 @@ async function go(items){
       var rec=await runQuestion(items[i]);
       records.push(rec); logRow(rec); refresh();
     }
-    els.status.textContent='Done. '+records.length+' question'+(records.length>1?'s':'')+' total. Watch the SECL-adjusted bars sit closer to the diagonal.';
+    els.status.textContent='Done. '+records.length+' question'+(records.length>1?'s':'')+' total. The NormP(True) bars (right) sit closer to the diagonal — that is the better-calibrated signal SECL distills into the weights.';
   }catch(err){
     els.status.classList.add('err');
     els.status.textContent='Error: '+err.message+'  ·  If this is CORS, switch the provider to OpenRouter.';
