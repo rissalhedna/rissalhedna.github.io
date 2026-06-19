@@ -8,6 +8,14 @@
 <meta property="og:title" content="Rissal Hedna — Applied Scientist / Research Engineer" />
 <meta property="og:description" content="LLM calibration, safety, and evaluation. First author of SECL." />
 <meta property="og:type" content="website" />
+<meta property="og:image" content="assets/og.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Rissal Hedna — Applied Scientist / Research Engineer" />
+<meta name="twitter:description" content="LLM calibration, safety, and evaluation. First author of SECL." />
+<meta name="twitter:image" content="assets/og.png" />
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,400;0,500;0,600;0,800;0,900&family=Archivo+Black&family=Space+Grotesk:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -54,6 +62,8 @@ header.nav{position:fixed;top:0;left:0;right:0;z-index:5000;display:flex;justify
 .nav nav a{font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;position:relative}
 .nav nav a::after{content:"";position:absolute;left:0;bottom:-3px;width:0;height:1px;background:currentColor;transition:width .25s}
 .nav nav a:hover::after{width:100%}
+.nav nav a.nav-resume{border:1.5px solid currentColor;border-radius:40px;padding:6px 13px}
+.nav nav a.nav-resume::after{display:none}
 @media(max-width:760px){.nav nav{display:none}}
 
 /* ===== HERO ===== */
@@ -74,6 +84,16 @@ header.nav{position:fixed;top:0;left:0;right:0;z-index:5000;display:flex;justify
 .hero-tags{display:flex;gap:8px;flex-wrap:wrap}
 .tag{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;border:1.5px solid var(--ink);border-radius:40px;padding:6px 12px}
 .scrollcue{margin-top:34px;font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;opacity:.6}
+.avail{display:inline-flex;align-items:center;gap:9px;font-family:var(--mono);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;border:1.5px solid var(--ink);border-radius:40px;padding:7px 14px;margin-top:clamp(20px,3vw,32px)}
+.avail .pulse{width:9px;height:9px;border-radius:50%;background:var(--red);position:relative;flex:0 0 auto}
+.avail .pulse::after{content:"";position:absolute;inset:0;border-radius:50%;background:var(--red);animation:pulse 1.8s ease-out infinite}
+@keyframes pulse{0%{transform:scale(1);opacity:.7}100%{transform:scale(2.8);opacity:0}}
+.hero-cta{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+.btn{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;border:1.5px solid var(--ink);border-radius:40px;padding:12px 20px;transition:transform .15s,background .2s,color .2s}
+.btn:hover{transform:translateY(-2px)}
+.btn-primary{background:var(--ink);color:var(--paper)}
+.btn-primary:hover{background:var(--red);border-color:var(--red);color:var(--ink)}
+.btn-ghost:hover{background:var(--ink);color:var(--paper)}
 
 /* ===== MARQUEE ===== */
 .marquee{border-top:1.5px solid var(--ink);border-bottom:1.5px solid var(--ink);background:var(--ink);color:var(--paper);overflow:hidden;white-space:nowrap;padding:14px 0}
@@ -209,6 +229,7 @@ header.nav{position:fixed;top:0;left:0;right:0;z-index:5000;display:flex;justify
     <a href="#talks">Talks</a>
     <a href="#exp">Experience</a>
     <a href="#contact">Contact</a>
+    <a class="nav-resume" href="assets/Rissal-Hedna-CV.pdf" target="_blank" rel="noopener">Resume ↓</a>
   </nav>
 </header>
 
@@ -236,6 +257,11 @@ header.nav{position:fixed;top:0;left:0;right:0;z-index:5000;display:flex;justify
       <span class="tag">Evaluation</span>
       <span class="tag">LLMs</span>
     </div>
+  </div>
+  <div class="avail"><span class="pulse"></span>Open to Forward Deployed / Applied AI roles · Available for consulting</div>
+  <div class="hero-cta">
+    <a class="btn btn-primary" href="assets/Rissal-Hedna-CV.pdf" target="_blank" rel="noopener">Resume ↓</a>
+    <a class="btn btn-ghost" href="mailto:rissalhedna@gmail.com">Get in touch ↗</a>
   </div>
   <div class="scrollcue">↓ Scroll</div>
 </section>
