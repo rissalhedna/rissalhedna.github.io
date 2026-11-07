@@ -1,683 +1,1532 @@
 <!doctype html>
 <html lang="en">
-<head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Mohamed Rissal Hedna — Applied Scientist / Research Engineer</title>
-<meta name="description" content="Mohamed Rissal Hedna. Applied scientist and research engineer working on LLM calibration, safety, and evaluation. First author of SECL (EMNLP 2026). Hamburg." />
-<meta property="og:title" content="Rissal Hedna — Applied Scientist / Research Engineer" />
-<meta property="og:description" content="LLM calibration, safety, and evaluation. First author of SECL, EMNLP 2026." />
-<meta property="og:type" content="website" />
-<meta property="og:image" content="assets/og.png" />
-<meta property="og:image:width" content="1200" />
-<meta property="og:image:height" content="630" />
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="Rissal Hedna — Applied Scientist / Research Engineer" />
-<meta name="twitter:description" content="LLM calibration, safety, and evaluation. First author of SECL, EMNLP 2026." />
-<meta name="twitter:image" content="assets/og.png" />
-<link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,400;0,500;0,600;0,800;0,900&family=Archivo+Black&family=Space+Grotesk:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Mohamed Rissal Hedna · AI Researcher</title>
+        <meta
+            name="description"
+            content="Mohamed Rissal Hedna, AI researcher in Hamburg working on LLM calibration, uncertainty quantification and trustworthy AI. First author of SECL (EMNLP 2026 Main Conference)."
+        />
+        <link rel="canonical" href="https://rissalhedna.github.io/" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://rissalhedna.github.io/" />
+        <meta
+            property="og:title"
+            content="Mohamed Rissal Hedna · AI Researcher"
+        />
+        <meta
+            property="og:description"
+            content="LLM calibration, uncertainty and trustworthy AI. First author of SECL, EMNLP 2026."
+        />
+        <meta
+            property="og:image"
+            content="https://rissalhedna.github.io/assets/og.jpg"
+        />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta
+            name="twitter:image"
+            content="https://rissalhedna.github.io/assets/og.jpg"
+        />
+        <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap"
+            rel="stylesheet"
+        />
+        <script>
+            // set theme before paint to avoid a flash
+            (function () {
+                try {
+                    var t = localStorage.getItem("theme");
+                    if (!t)
+                        t = matchMedia("(prefers-color-scheme: dark)").matches
+                            ? "dark"
+                            : "light";
+                    document.documentElement.dataset.theme = t;
+                } catch (e) {}
+            })();
+        </script>
+        <style>
+            :root {
+                --bg: #efe9dc;
+                --bg-2: #e6decd;
+                --ink: #15130f;
+                --muted: #5d574c;
+                --line: rgba(21, 19, 15, 0.14);
+                --accent: #d9361a;
+                --good: #1f7a44;
+                --sans: "Space Grotesk", system-ui, sans-serif;
+                --mono: "Space Mono", ui-monospace, monospace;
+            }
+            [data-theme="dark"] {
+                --bg: #15130f;
+                --bg-2: #1f1c17;
+                --ink: #efe9dc;
+                --muted: #a59d8f;
+                --line: rgba(239, 233, 220, 0.14);
+                --accent: #ff5a3c;
+                --good: #4cc47f;
+            }
+            * {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+            html {
+                scroll-behavior: smooth;
+            }
+            body {
+                background: var(--bg);
+                color: var(--ink);
+                font: 17px/1.6 var(--sans);
+                -webkit-font-smoothing: antialiased;
+                transition:
+                    background 0.2s,
+                    color 0.2s;
+            }
+            a {
+                color: inherit;
+                text-decoration-color: var(--line);
+                text-underline-offset: 3px;
+            }
+            a:hover {
+                color: var(--accent);
+                text-decoration-color: currentColor;
+            }
+            img {
+                display: block;
+                max-width: 100%;
+            }
+            .wrap {
+                max-width: 780px;
+                margin: 0 auto;
+                padding: 0 22px;
+            }
+            .mono {
+                font-family: var(--mono);
+                font-size: 12px;
+                letter-spacing: 0.04em;
+            }
+            .muted {
+                color: var(--muted);
+            }
+            .i {
+                width: 20px;
+                height: 20px;
+                flex: 0 0 auto;
+                shape-rendering: crispEdges;
+                vertical-align: -4px;
+            }
+            :focus-visible {
+                outline: 2px solid var(--accent);
+                outline-offset: 3px;
+            }
 
-<style>
-:root{
-  --ink:#15130F;
-  --paper:#EFE9DC;
-  --paper-2:#E6DECD;
-  --red:#FF3B1D;
-  --blue:#1B2EE8;
-  --yellow:#FFC700;
-  --line:rgba(21,19,15,.16);
-  --display:"Archivo Black","Archivo",sans-serif;
-  --body:"Space Grotesk",sans-serif;
-  --mono:"Space Mono",monospace;
-}
-*{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.45;-webkit-font-smoothing:antialiased;overflow-x:hidden}
-a{color:inherit;text-decoration:none}
-img{display:block;max-width:100%}
-body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:9000;opacity:.05;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
-.mono{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase}
-.wrap{padding:0 clamp(16px,4vw,40px)}
-section{position:relative}
+            /* nav */
+            header {
+                position: sticky;
+                top: 0;
+                z-index: 10;
+                background: var(--bg);
+                border-bottom: 1px solid var(--line);
+            }
+            header .wrap {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                height: 56px;
+                gap: 16px;
+            }
+            .brand {
+                font-weight: 700;
+                text-decoration: none;
+            }
+            nav {
+                display: flex;
+                align-items: center;
+                gap: 18px;
+            }
+            nav a {
+                font-family: var(--mono);
+                font-size: 12px;
+                text-decoration: none;
+            }
+            .theme {
+                background: none;
+                border: 0;
+                color: inherit;
+                cursor: pointer;
+                display: grid;
+                place-items: center;
+                padding: 4px;
+            }
+            .theme .i {
+                width: 22px;
+                height: 22px;
+            }
+            [data-theme="dark"] .sun-only,
+            [data-theme="light"] .moon-only {
+                display: none;
+            }
+            @media (max-width: 620px) {
+                nav .hide-sm {
+                    display: none;
+                }
+            }
 
-/* ===== PRELOADER ===== */
-#preloader{position:fixed;inset:0;z-index:10000;background:var(--ink);color:var(--paper);display:flex;flex-direction:column;justify-content:space-between;padding:clamp(20px,4vw,48px)}
-#preloader .pl-top{display:flex;justify-content:space-between}
-#preloader .pl-mid{display:flex;align-items:flex-end;justify-content:space-between;flex:1;padding:24px 0;gap:20px}
-#pl-count{font-family:var(--display);font-size:clamp(80px,26vw,360px);line-height:.8;letter-spacing:-.02em}
-#pl-count .pct{color:var(--red);font-size:.32em;vertical-align:top}
-#preloader .pl-word{font-family:var(--display);font-size:clamp(24px,5vw,64px);line-height:.9;text-transform:uppercase;text-align:right}
-.pl-bar{height:3px;background:rgba(239,233,220,.2);position:relative}
-.pl-bar i{position:absolute;left:0;top:0;bottom:0;width:0;background:var(--red)}
-#preloader.done{transform:translateY(-100%);transition:transform .8s cubic-bezier(.76,0,.24,1)}
+            /* hero */
+            .hero {
+                display: grid;
+                grid-template-columns: 150px 1fr;
+                gap: 28px;
+                align-items: start;
+                padding: 56px 0 40px;
+            }
+            @media (max-width: 620px) {
+                .hero {
+                    grid-template-columns: 1fr;
+                    padding-top: 36px;
+                }
+            }
+            .photo {
+                position: relative;
+                width: 150px;
+                cursor: help;
+            }
+            .photo img {
+                width: 150px;
+                height: 150px;
+                object-fit: cover;
+                border-radius: 6px;
+                filter: grayscale(0.15);
+            }
+            .photo .p {
+                position: absolute;
+                left: 50%;
+                bottom: -12px;
+                transform: translate(-50%, 4px);
+                white-space: nowrap;
+                background: var(--ink);
+                color: var(--bg);
+                font: 11px var(--mono);
+                padding: 4px 8px;
+                border-radius: 4px;
+                opacity: 0;
+                transition: 0.2s;
+                pointer-events: none;
+            }
+            .photo:hover .p,
+            .photo:focus .p,
+            .photo.on .p {
+                opacity: 1;
+                transform: translate(-50%, 0);
+            }
+            h1 {
+                font-size: clamp(30px, 5vw, 40px);
+                line-height: 1.1;
+                letter-spacing: -0.02em;
+                font-weight: 700;
+            }
+            .role {
+                font-family: var(--mono);
+                font-size: 13px;
+                color: var(--muted);
+                margin: 8px 0 18px;
+                display: flex;
+                align-items: center;
+                gap: 6px;
+                flex-wrap: wrap;
+            }
+            .lede {
+                max-width: 60ch;
+            }
+            .lede b {
+                font-weight: 700;
+            }
+            .links {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 8px 18px;
+                margin-top: 20px;
+            }
+            .links a {
+                display: inline-flex;
+                align-items: center;
+                gap: 7px;
+                font-family: var(--mono);
+                font-size: 13px;
+                text-decoration: none;
+            }
+            .cta {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 10px;
+                margin-top: 22px;
+            }
+            .btn {
+                display: inline-flex;
+                align-items: center;
+                gap: 8px;
+                font: 13px var(--mono);
+                border: 1.5px solid var(--ink);
+                border-radius: 6px;
+                padding: 9px 14px;
+                text-decoration: none;
+                background: none;
+                color: var(--ink);
+                cursor: pointer;
+                transition:
+                    transform 0.12s,
+                    background 0.15s,
+                    color 0.15s;
+            }
+            .btn:hover {
+                transform: translateY(-1px);
+                color: var(--ink);
+            }
+            .btn.solid {
+                background: var(--ink);
+                color: var(--bg);
+            }
+            .btn.solid:hover {
+                background: var(--accent);
+                border-color: var(--accent);
+                color: var(--bg);
+            }
 
-/* ===== NAV ===== */
-header.nav{position:fixed;top:0;left:0;right:0;z-index:5000;display:flex;justify-content:space-between;align-items:center;padding:16px clamp(16px,4vw,40px);mix-blend-mode:difference;color:#fff}
-.nav .brand{font-family:var(--display);font-size:18px}
-.nav .brand b{color:var(--red)}
-.nav nav{display:flex;gap:22px}
-.nav nav a{font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;position:relative}
-.nav nav a::after{content:"";position:absolute;left:0;bottom:-3px;width:0;height:1px;background:currentColor;transition:width .25s}
-.nav nav a:hover::after{width:100%}
-.nav nav a.nav-resume{border:1.5px solid currentColor;border-radius:40px;padding:6px 13px}
-.nav nav a.nav-resume::after{display:none}
-@media(max-width:760px){.nav nav{display:none}}
+            /* sections */
+            section {
+                padding: 34px 0;
+                border-top: 1px solid var(--line);
+            }
+            h2 {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                font-size: 15px;
+                font-family: var(--mono);
+                font-weight: 700;
+                letter-spacing: 0.06em;
+                text-transform: uppercase;
+                margin-bottom: 20px;
+            }
+            h2 .i {
+                color: var(--accent);
+            }
+            p + p {
+                margin-top: 12px;
+            }
+            .hl {
+                color: var(--accent);
+                font-weight: 700;
+            }
 
-/* ===== HERO ===== */
-#hero{min-height:100svh;display:flex;flex-direction:column;justify-content:center;padding-top:90px;padding-bottom:40px}
-.hero-meta{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;border-top:1.5px solid var(--ink);border-bottom:1.5px solid var(--ink);padding:8px 0;margin-bottom:clamp(20px,4vw,40px)}
-.hero-title{font-family:var(--display);font-size:clamp(58px,15.5vw,260px);line-height:.82;letter-spacing:-.02em;text-transform:uppercase}
-/* CMYK screenprint misregistration */
-.cmyk{position:relative;display:inline-block;color:var(--ink)}
-.cmyk::before,.cmyk::after{content:attr(data-t);position:absolute;left:0;top:0;mix-blend-mode:multiply;pointer-events:none}
-.cmyk::before{color:var(--red);animation:mis1 4.5s ease-in-out infinite}
-.cmyk::after{color:var(--blue);animation:mis2 4.5s ease-in-out infinite}
-@keyframes mis1{0%,100%{transform:translate(0,0)}30%{transform:translate(-5px,3px)}60%{transform:translate(3px,-2px)}}
-@keyframes mis2{0%,100%{transform:translate(0,0)}30%{transform:translate(4px,-3px)}60%{transform:translate(-3px,2px)}}
-.hero-title .outline{display:block;color:transparent;-webkit-text-stroke:2px var(--ink)}
-.hero-sub{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:18px;margin-top:clamp(20px,4vw,44px)}
-.hero-sub .lede{max-width:48ch;font-size:clamp(16px,1.7vw,20px);line-height:1.5}
-.hero-sub .lede b{font-weight:600}
-.hero-tags{display:flex;gap:8px;flex-wrap:wrap}
-.tag{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;border:1.5px solid var(--ink);border-radius:40px;padding:6px 12px}
-.scrollcue{margin-top:34px;font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;opacity:.6}
-.avail{display:inline-flex;align-items:center;gap:9px;font-family:var(--mono);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;border:1.5px solid var(--ink);border-radius:40px;padding:7px 14px;margin-top:clamp(20px,3vw,32px)}
-.avail .pulse{width:9px;height:9px;border-radius:50%;background:var(--red);position:relative;flex:0 0 auto}
-.avail .pulse::after{content:"";position:absolute;inset:0;border-radius:50%;background:var(--red);animation:pulse 1.8s ease-out infinite}
-@keyframes pulse{0%{transform:scale(1);opacity:.7}100%{transform:scale(2.8);opacity:0}}
-.hero-cta{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
-.btn{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;border:1.5px solid var(--ink);border-radius:40px;padding:12px 20px;transition:transform .15s,background .2s,color .2s}
-.btn:hover{transform:translateY(-2px)}
-.btn-primary{background:var(--ink);color:var(--paper)}
-.btn-primary:hover{background:var(--red);border-color:var(--red);color:var(--ink)}
-.btn-ghost:hover{background:var(--ink);color:var(--paper)}
+            /* list rows (news, experience, projects) */
+            .rows {
+                list-style: none;
+            }
+            .rows li {
+                display: grid;
+                grid-template-columns: 110px 1fr;
+                gap: 16px;
+                padding: 9px 0;
+            }
+            .rows .when {
+                font: 12px/1.9 var(--mono);
+                color: var(--muted);
+            }
+            .rows .t {
+                font-weight: 700;
+            }
+            .rows .d {
+                color: var(--muted);
+                font-size: 15.5px;
+            }
+            @media (max-width: 620px) {
+                .rows li {
+                    grid-template-columns: 1fr;
+                    gap: 2px;
+                }
+            }
 
-/* ===== MARQUEE ===== */
-.marquee{border-top:1.5px solid var(--ink);border-bottom:1.5px solid var(--ink);background:var(--ink);color:var(--paper);overflow:hidden;white-space:nowrap;padding:14px 0}
-.marquee .track{display:inline-block;will-change:transform;animation:scroll 28s linear infinite}
-.marquee.alt{background:var(--red);color:var(--ink)}
-.marquee.alt .track{animation-duration:22s;animation-direction:reverse}
-.marquee span{font-family:var(--display);font-size:clamp(20px,3.4vw,40px);text-transform:uppercase;padding:0 18px}
-.marquee .dot{color:var(--yellow)}
-.marquee.alt .dot{color:var(--blue)}
-@keyframes scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+            /* publications */
+            .pub {
+                padding: 12px 0;
+            }
+            .pub .title {
+                font-weight: 700;
+                line-height: 1.35;
+            }
+            .pub .auth {
+                font-size: 15.5px;
+                color: var(--muted);
+                margin-top: 3px;
+            }
+            .pub .auth b {
+                color: var(--ink);
+            }
+            .pub .venue {
+                font: 12px var(--mono);
+                margin-top: 6px;
+                display: flex;
+                flex-wrap: wrap;
+                gap: 6px 14px;
+                align-items: center;
+            }
+            .badge {
+                background: var(--accent);
+                color: var(--bg);
+                padding: 1px 7px;
+                border-radius: 4px;
+                font-weight: 700;
+            }
+            .pub details {
+                margin-top: 8px;
+            }
+            .pub summary {
+                cursor: pointer;
+                font: 12px var(--mono);
+                color: var(--muted);
+                list-style: none;
+                display: inline;
+            }
+            .pub summary::-webkit-details-marker {
+                display: none;
+            }
+            .pub pre {
+                font: 11.5px/1.5 var(--mono);
+                background: var(--bg-2);
+                padding: 12px;
+                border-radius: 6px;
+                overflow: auto;
+                margin-top: 8px;
+                position: relative;
+            }
+            .copy {
+                float: right;
+                font: 11px var(--mono);
+                background: none;
+                border: 1px solid var(--line);
+                color: inherit;
+                border-radius: 4px;
+                padding: 2px 6px;
+                cursor: pointer;
+            }
 
-/* ===== STATS BAND ===== */
-#stats{background:var(--ink);color:var(--paper);padding:clamp(40px,7vw,90px) 0}
-.stats-grid{display:grid;grid-template-columns:repeat(5,1fr)}
-.stat{padding:0 clamp(10px,2vw,24px);border-left:1px solid rgba(239,233,220,.2)}
-.stat:first-child{border-left:0}
-.stat .num{font-family:var(--display);font-size:clamp(40px,7vw,96px);line-height:.85;letter-spacing:-.02em}
-.stat:nth-child(1) .num{color:var(--red)}
-.stat:nth-child(2) .num{color:var(--yellow)}
-.stat:nth-child(3) .num{color:var(--paper)}
-.stat:nth-child(4) .num{color:var(--blue)}
-.stat:nth-child(5) .num{color:var(--red)}
-.stat .lab{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;margin-top:14px;opacity:.8;line-height:1.45}
-@media(max-width:860px){.stats-grid{grid-template-columns:repeat(2,1fr);gap:28px 0}.stat{border-left:0}.stat .num{font-size:clamp(44px,16vw,80px)}}
+            /* game */
+            .game {
+                border: 1.5px solid var(--ink);
+                border-radius: 8px;
+                padding: 22px;
+                margin-top: 22px;
+                background: var(--bg-2);
+            }
+            .game-top {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                gap: 10px;
+                margin-bottom: 14px;
+            }
+            .game-top .mono {
+                display: flex;
+                align-items: center;
+                gap: 6px;
+            }
+            .stmt {
+                font-size: clamp(19px, 2.6vw, 23px);
+                font-weight: 700;
+                line-height: 1.3;
+                min-height: 2.6em;
+            }
+            .choices {
+                display: flex;
+                gap: 8px;
+                flex-wrap: wrap;
+                margin-top: 16px;
+            }
+            .choices .btn.on {
+                background: var(--ink);
+                color: var(--bg);
+            }
+            .conf {
+                margin-top: 14px;
+            }
+            .conf .lab {
+                font: 12px var(--mono);
+                color: var(--muted);
+                margin-bottom: 8px;
+            }
+            .chips {
+                display: flex;
+                gap: 6px;
+                flex-wrap: wrap;
+            }
+            .chip {
+                font: 13px var(--mono);
+                border: 1.5px solid var(--ink);
+                background: var(--bg);
+                color: var(--ink);
+                border-radius: 20px;
+                padding: 6px 11px;
+                cursor: pointer;
+            }
+            .chip:hover {
+                background: var(--accent);
+                border-color: var(--accent);
+                color: var(--bg);
+            }
+            .chip:disabled {
+                opacity: 0.35;
+                cursor: not-allowed;
+                background: var(--bg);
+                color: var(--ink);
+                border-color: var(--ink);
+            }
+            .fb {
+                margin-top: 16px;
+                font-size: 15.5px;
+                min-height: 1.6em;
+            }
+            .fb .ok {
+                color: var(--good);
+                font-weight: 700;
+            }
+            .fb .no {
+                color: var(--accent);
+                font-weight: 700;
+            }
+            .result {
+                display: grid;
+                grid-template-columns: 220px 1fr;
+                gap: 22px;
+                align-items: center;
+            }
+            @media (max-width: 620px) {
+                .result {
+                    grid-template-columns: 1fr;
+                }
+            }
+            .result svg {
+                width: 100%;
+                height: auto;
+            }
+            .verdict {
+                font-size: 20px;
+                font-weight: 700;
+                line-height: 1.3;
+                margin-bottom: 10px;
+            }
+            .kv {
+                display: flex;
+                gap: 18px;
+                flex-wrap: wrap;
+                font: 12px var(--mono);
+                color: var(--muted);
+                margin: 10px 0 14px;
+            }
+            .kv b {
+                display: block;
+                font: 700 20px var(--sans);
+                color: var(--ink);
+            }
 
-/* ===== SECTION HEAD ===== */
-.sec-head{display:flex;align-items:baseline;gap:16px;flex-wrap:wrap;padding:clamp(48px,8vw,110px) 0 clamp(20px,3vw,40px)}
-.sec-head .idx{font-family:var(--mono);font-size:13px;color:var(--red);letter-spacing:.1em}
-.sec-head h2{font-family:var(--display);font-size:clamp(30px,6vw,72px);text-transform:uppercase;line-height:.9;letter-spacing:-.01em}
+            /* talks */
+            .talks {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 22px;
+            }
+            @media (max-width: 620px) {
+                .talks {
+                    grid-template-columns: 1fr;
+                }
+            }
+            .talk a.img {
+                display: block;
+                border-radius: 6px;
+                overflow: hidden;
+                border: 1px solid var(--line);
+                aspect-ratio: 16/10;
+            }
+            .talk img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                transition: transform 0.3s;
+            }
+            .talk a.img:hover img {
+                transform: scale(1.03);
+            }
+            .talk .where {
+                font: 12px var(--mono);
+                color: var(--muted);
+                margin-top: 12px;
+            }
+            .talk .tt {
+                font-weight: 700;
+                line-height: 1.3;
+                margin-top: 4px;
+            }
 
-/* ===== ICONS (duotone) =====
-   Placeholder set, drawn in the freehand duotone spirit.
-   To swap in real Streamline Freehand Duotone icons:
-   download the SVG from streamlinehq.com under your license, open it,
-   and paste its <path> elements into the matching <symbol> below.
-   Give the main strokes class="i-1" and the accent shapes class="i-2".
-   Keep the symbol's viewBox as whatever the downloaded file uses. */
-.ico{width:1.55em;height:1.55em;flex:0 0 auto;overflow:visible}
-.ico .i-1{fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
-.ico .i-2{fill:none;stroke:var(--red);stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round;opacity:.95}
-.ico-dark .i-2{stroke:var(--yellow)}
+            footer {
+                border-top: 1px solid var(--line);
+                padding: 30px 0 48px;
+                font: 12px/1.8 var(--mono);
+                color: var(--muted);
+            }
+            footer .wrap {
+                display: flex;
+                justify-content: space-between;
+                flex-wrap: wrap;
+                gap: 8px 20px;
+            }
 
-/* ===== NEWS ===== */
-#news .news-list{padding-bottom:clamp(48px,8vw,100px)}
-.news-item{display:grid;grid-template-columns:150px 1fr auto;gap:clamp(12px,3vw,36px);align-items:baseline;padding:20px 0;border-bottom:1.5px solid var(--line)}
-.news-item:first-child{border-top:1.5px solid var(--ink)}
-.news-item .when{font-family:var(--mono);font-size:12.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--red);white-space:nowrap}
-.news-item .n-title{font-family:var(--display);font-size:clamp(17px,2.1vw,23px);text-transform:uppercase;line-height:1.05;display:flex;align-items:center;gap:11px}
-.news-item .n-desc{margin-top:8px;font-size:15.5px;line-height:1.55;max-width:60ch}
-.news-item .n-desc a{border-bottom:1.5px solid var(--red);padding-bottom:1px}
-.news-item .n-desc a:hover{background:var(--yellow)}
-.n-flag{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;background:var(--yellow);border:1.5px solid var(--ink);border-radius:30px;padding:4px 10px;white-space:nowrap}
-@media(max-width:720px){.news-item{grid-template-columns:1fr;gap:6px}.n-flag{justify-self:start;margin-top:10px}}
-
-/* ===== FOCUS + DIAGRAM ===== */
-#focus .focus-grid{display:grid;grid-template-columns:1fr 1.05fr;gap:clamp(28px,5vw,72px);align-items:center;padding-bottom:clamp(48px,8vw,100px)}
-@media(max-width:900px){#focus .focus-grid{grid-template-columns:1fr;gap:36px}}
-#focus p{font-size:clamp(18px,2vw,23px);line-height:1.55;margin-bottom:1em;max-width:42ch}
-#focus p b{font-weight:600}
-#focus p .hl{background:var(--yellow);padding:0 .12em}
-.diagram{border:1.5px solid var(--ink);background:var(--ink);color:var(--paper);padding:22px 22px 18px;position:relative}
-.diagram .d-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
-.diagram .d-title{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase}
-.diagram svg{width:100%;height:auto;display:block}
-.d-legend{display:flex;gap:18px;flex-wrap:wrap;margin-top:12px;font-family:var(--mono);font-size:10.5px;letter-spacing:.05em;text-transform:uppercase}
-.d-legend i{display:inline-block;width:14px;height:3px;vertical-align:middle;margin-right:6px}
-.recal{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;background:var(--red);color:var(--ink);border:0;padding:8px 14px;cursor:pointer;border-radius:40px;transition:transform .15s}
-.recal:hover{transform:translateY(-1px)}
-.recal:active{transform:translateY(1px)}
-
-/* ===== WORK ===== */
-.work{border-top:1.5px solid var(--ink)}
-.work-item{display:grid;grid-template-columns:90px 1fr auto;gap:clamp(16px,3vw,40px);align-items:start;padding:clamp(26px,4vw,46px) 0;border-bottom:1.5px solid var(--ink);transition:padding .3s,background .3s,color .3s}
-.work-item:hover{padding-left:14px;background:var(--ink);color:var(--paper)}
-.work-item:hover .w-tag{border-color:var(--paper)}
-.work-item:hover .w-arrow{color:var(--red);transform:translate(4px,-4px)}
-.w-idx{font-family:var(--mono);font-size:13px;letter-spacing:.08em;padding-top:8px}
-.w-idx .feat{color:var(--red)}
-.work-item:hover .w-idx .feat{color:var(--yellow)}
-.w-title{font-family:var(--display);font-size:clamp(24px,4.4vw,52px);line-height:.95;text-transform:uppercase;letter-spacing:-.01em}
-.w-desc{margin-top:10px;max-width:56ch;font-size:15.5px;line-height:1.5}
-.w-tags{margin-top:14px;display:flex;gap:7px;flex-wrap:wrap}
-.w-tag{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;border:1.2px solid currentColor;border-radius:30px;padding:4px 9px;opacity:.9}
-.w-meta{font-family:var(--mono);font-size:11.5px;text-align:right;line-height:1.8;white-space:nowrap}
-.w-arrow{font-family:var(--display);font-size:30px;line-height:1;transition:transform .3s,color .3s}
-@media(max-width:720px){.work-item{grid-template-columns:1fr;gap:10px}.w-meta{text-align:left}.w-arrow{display:none}}
-
-/* ===== TALKS ===== */
-#talks .talk{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(24px,4vw,56px);align-items:center;padding-bottom:clamp(48px,8vw,100px)}
-@media(max-width:860px){#talks .talk{grid-template-columns:1fr}}
-.talk-photo{position:relative;border:1.5px solid var(--ink);overflow:hidden}
-.talk-photo img{width:100%;height:100%;object-fit:cover;filter:saturate(.9)}
-.talk-photo .tp-tag{position:absolute;left:0;bottom:0;background:var(--red);color:var(--ink);font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;padding:6px 12px}
-.talk-body .t-where{font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--red)}
-.talk-body h3{font-family:var(--display);font-size:clamp(24px,4vw,44px);line-height:1;text-transform:uppercase;margin:12px 0 16px}
-.talk-body p{font-size:16px;line-height:1.6;max-width:54ch;margin-bottom:14px}
-.talk-cta{display:inline-flex;align-items:center;gap:8px;margin-top:6px;font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;border:1.5px solid var(--ink);border-radius:40px;padding:10px 16px;transition:.2s}
-.talk-cta:hover{background:var(--ink);color:var(--paper)}
-
-/* ===== EXPERIENCE ===== */
-#exp .exp-grid{padding-bottom:clamp(48px,8vw,100px)}
-.exp-row{display:grid;grid-template-columns:140px 1fr 1fr;gap:clamp(12px,3vw,40px);padding:22px 0;border-bottom:1.5px solid var(--line);align-items:baseline}
-.exp-row:first-child{border-top:1.5px solid var(--ink)}
-.exp-row .yr{font-family:var(--mono);font-size:13px;color:var(--red)}
-.exp-row .role{font-family:var(--display);font-size:clamp(18px,2.4vw,26px);text-transform:uppercase;line-height:1}
-.exp-row .org{font-family:var(--mono);font-size:12.5px;margin-top:6px;opacity:.7}
-.exp-row .note{font-size:15px;line-height:1.5;max-width:52ch}
-@media(max-width:720px){.exp-row{grid-template-columns:1fr;gap:6px}}
-
-/* ===== CONTACT ===== */
-#contact{background:var(--ink);color:var(--paper);margin-top:clamp(48px,8vw,90px)}
-#contact .inner{padding:clamp(48px,8vw,120px) clamp(16px,4vw,40px) 40px}
-.contact-big{font-family:var(--display);font-size:clamp(40px,11vw,150px);line-height:.86;text-transform:uppercase;letter-spacing:-.02em}
-.contact-big .blue{color:var(--blue)}
-.contact-big a{transition:color .2s}
-.contact-big a:hover{color:var(--red)}
-.contact-links{display:flex;gap:10px;flex-wrap:wrap;margin-top:clamp(28px,5vw,56px)}
-.contact-links a{display:inline-flex;align-items:center;gap:9px;font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;border:1.5px solid var(--paper);border-radius:40px;padding:10px 18px;transition:.2s}
-.contact-links a:hover{background:var(--red);border-color:var(--red);color:var(--ink)}
-.contact-links a:hover .i-2{stroke:var(--ink)}
-.foot-meta{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-top:clamp(48px,8vw,90px);padding-top:18px;border-top:1px solid rgba(239,233,220,.25);font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;opacity:.7}
-
-/* ===== DRAGGABLE STICKER ===== */
-#sticker{position:fixed;right:26px;bottom:26px;width:118px;height:118px;z-index:4000;cursor:grab;user-select:none;touch-action:none}
-#sticker.grabbing{cursor:grabbing}
-#sticker .spin{animation:spin 14s linear infinite;transform-origin:center}
-@keyframes spin{to{transform:rotate(360deg)}}
-@media(max-width:600px){#sticker{width:92px;height:92px;right:14px;bottom:14px}}
-
-.reveal{opacity:0;transform:translateY(24px);transition:opacity .7s,transform .7s}
-.reveal.in{opacity:1;transform:none}
-@media(prefers-reduced-motion:reduce){
-  *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
-  .reveal{opacity:1;transform:none}
-  #preloader{display:none}
-  .cmyk::before,.cmyk::after{display:none}
-}
-</style>
-</head>
-<body>
-
-<!-- ICON SPRITE
-     Placeholders in the freehand duotone style. Replace the paths inside each
-     <symbol> with the real Streamline SVG paths when you have them downloaded.
-     .i-1 = primary stroke (inherits text colour), .i-2 = accent stroke. -->
-<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
-  <symbol id="ico-paper" viewBox="0 0 24 24">
-    <path class="i-1" d="M6.2 3.4c3.6-.5 7.3-.4 10.9.1.5 1.9.6 3.9.5 5.9-.1 3.6-.1 7.2.2 10.8-3.9.6-7.9.6-11.8.1-.4-3.5-.4-7-.2-10.5.1-2.1.2-4.2.4-6.4Z"/>
-    <path class="i-2" d="M8.7 8.6c2.1-.3 4.2-.3 6.3-.1"/>
-    <path class="i-2" d="M8.6 12.4c2.1-.3 4.3-.3 6.4 0"/>
-    <path class="i-1" d="M8.8 16.2c1.4-.2 2.8-.2 4.2-.1"/>
-  </symbol>
-  <symbol id="ico-code" viewBox="0 0 24 24">
-    <path class="i-1" d="M8.6 7.3c-1.9 1.3-3.6 2.9-5.1 4.6 1.5 1.8 3.2 3.4 5.2 4.7"/>
-    <path class="i-1" d="M15.4 7.2c2 1.3 3.8 2.9 5.2 4.7-1.4 1.8-3.1 3.4-5 4.7"/>
-    <path class="i-2" d="M13.4 4.6c-.9 5-1.9 9.9-3 14.8"/>
-  </symbol>
-  <symbol id="ico-case" viewBox="0 0 24 24">
-    <path class="i-1" d="M3.4 8.2c5.7-.7 11.5-.7 17.2 0 .4 3.6.4 7.2 0 10.8-5.7.6-11.5.6-17.2 0-.4-3.6-.4-7.2 0-10.8Z"/>
-    <path class="i-1" d="M9 8c-.1-1 0-2 .3-3 1.6-.3 3.2-.3 4.8 0 .2 1 .3 2 .2 3"/>
-    <path class="i-2" d="M3.6 12.6c5.6.9 11.3.9 16.9 0"/>
-  </symbol>
-  <symbol id="ico-cap" viewBox="0 0 24 24">
-    <path class="i-1" d="M12 4.2c3.4 1.2 6.7 2.6 9.8 4.4-3.1 1.8-6.4 3.3-9.8 4.4-3.5-1-6.8-2.5-9.9-4.4C5.2 6.8 8.5 5.3 12 4.2Z"/>
-    <path class="i-2" d="M6.3 10.8c-.2 2-.2 4 .1 6 3.7 1.2 7.6 1.2 11.3 0 .3-2 .3-4 .1-6"/>
-    <path class="i-1" d="M20.9 9.1c.3 2 .4 4.1.2 6.1"/>
-  </symbol>
-  <symbol id="ico-mic" viewBox="0 0 24 24">
-    <path class="i-1" d="M12 2.9c1.6-.1 2.9 1 3 2.6.2 2 .2 4.1 0 6.1-.1 1.6-1.4 2.7-3 2.6-1.6.1-2.9-1-3-2.6-.2-2-.2-4.1 0-6.1.1-1.6 1.4-2.7 3-2.6Z"/>
-    <path class="i-2" d="M6.3 10.4c-.2 3 2.3 5.6 5.3 5.7 3.1.1 5.7-2.4 5.8-5.5"/>
-    <path class="i-1" d="M12 16.4c.2 1.6.2 3.2.1 4.8"/>
-    <path class="i-1" d="M9.2 21.1c1.9-.2 3.8-.2 5.7 0"/>
-  </symbol>
-  <symbol id="ico-mail" viewBox="0 0 24 24">
-    <path class="i-1" d="M2.9 5.6c6.1-.7 12.2-.7 18.3 0 .4 4.2.4 8.5 0 12.7-6.1.7-12.2.7-18.3 0-.4-4.2-.4-8.5 0-12.7Z"/>
-    <path class="i-2" d="M3.4 6.3c2.7 2.6 5.6 4.9 8.7 6.9 3-2.1 5.9-4.4 8.6-6.9"/>
-  </symbol>
-  <symbol id="ico-git" viewBox="0 0 24 24">
-    <path class="i-1" d="M12 2.8c5 0 9.1 4 9.2 9 0 3.9-2.5 7.4-6.2 8.6-.5.1-.7-.2-.7-.5v-2.7c2.5.3 3.3-1.2 3.3-1.2.5-1.2 1.3-1.6 1.3-1.6-1-.7-2.2-.3-2.9.6-.4.6-1.1 1-1.8 1"/>
-    <path class="i-2" d="M9.4 20.9c-3.9-1.1-6.6-4.7-6.6-8.8C2.8 7 6.9 2.9 12 2.8"/>
-    <path class="i-1" d="M9.5 20.9c0-1 0-2.1.1-3.1-2.4.3-3.2-1.2-3.2-1.2-.5-1.2-1.3-1.6-1.3-1.6"/>
-  </symbol>
-  <symbol id="ico-scholar" viewBox="0 0 24 24">
-    <path class="i-1" d="M4.6 3.5c4.9-.6 9.9-.6 14.8 0 .4 5.6.4 11.3 0 16.9-4.9.6-9.9.6-14.8 0-.4-5.6-.4-11.3 0-16.9Z"/>
-    <path class="i-2" d="M8.2 8.7c2.5-.4 5.1-.4 7.6 0"/>
-    <path class="i-2" d="M8.2 12.6c2.5-.4 5.1-.4 7.6 0"/>
-  </symbol>
-  <symbol id="ico-link" viewBox="0 0 24 24">
-    <path class="i-1" d="M10.2 13.9c1.5 1.6 4 1.7 5.6.2 1.2-1.1 2.3-2.3 3.3-3.6 1.3-1.7 1-4.2-.7-5.5-1.6-1.2-3.9-1-5.2.6-.7.8-1.4 1.5-2.1 2.3"/>
-    <path class="i-2" d="M13.8 10.1c-1.5-1.6-4-1.7-5.6-.2-1.2 1.1-2.3 2.3-3.3 3.6-1.3 1.7-1 4.2.7 5.5 1.6 1.2 3.9 1 5.2-.6.7-.8 1.4-1.5 2.1-2.3"/>
-  </symbol>
+            @media (prefers-reduced-motion: reduce) {
+                * {
+                    transition: none !important;
+                    scroll-behavior: auto !important;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <svg xmlns="http://www.w3.org/2000/svg" width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+<!-- Pixel icons by Streamline (streamlinehq.com), CC BY 4.0 -->
+<symbol id="mail" viewBox="0 0 32 32"><path fill="currentColor" d="M30.47 9.145h-1.52v1.53h1.52v1.52h-1.52v1.52h1.52v1.53h-1.52v1.52h1.52v1.52h-1.52v1.53h1.52v1.52h-1.52v1.53h1.52v1.52H32V7.625h-1.53zm-3.04 13.72H25.9v1.52h-1.52v-1.52h-1.52v1.52h-1.53v-1.52h-1.52v1.52h-1.53v-1.52h-1.52v1.52h-1.52v-1.52h-1.53v1.52h-1.52v-1.52h-1.53v1.52H9.14v-1.52H7.62v1.52H6.09v-1.52H4.57v1.52H1.52v1.52h28.95v-1.52h-3.04zm-1.53-12.19h-3.04v1.52h-1.53v3.05h1.53v1.52h3.04v-1.52h1.53v-3.05H25.9zm-21.33 9.14h9.14v1.52H4.57Zm0-3.05h6.09v1.52H4.57Zm0-7.62h1.52v-1.52h1.53v1.52h1.52v-1.52h1.52v1.52h1.53v-1.52h1.52v1.52h1.53v-1.52h1.52v1.52h1.52v-1.52h1.53v1.52h1.52v-1.52h1.53v1.52h1.52v-1.52h1.52v1.52h1.53v-1.52h3.04v-1.53H1.52v1.53h3.05z"/><path fill="currentColor" d="M3.05 22.865v-1.53H1.52v-1.52h1.53v-1.53H1.52v-1.52h1.53v-1.52H1.52v-1.53h1.53v-1.52H1.52v-1.52h1.53v-1.53H1.52v-1.52H0v16.76h1.52v-1.52z"/></symbol>
+<symbol id="code" viewBox="0 0 32 32"><path fill="currentColor" d="M30.48 16.005H32v7.62h-1.52Zm-1.53 7.62h1.53v3.04h-1.53Zm0-10.67h1.53v3.05h-1.53Zm-1.52 13.71h1.52v3.05h-1.52Zm0-15.24h1.52v1.53h-1.52Zm-1.53 18.29h1.53v1.52H25.9Zm0-9.14h1.53v3.05H25.9Zm0-4.57h1.53v3.04H25.9Zm0-6.1h1.53v1.52H25.9Zm-1.52 13.72h1.52v1.52h-1.52Zm0-12.2h1.52v4.58h-1.52Zm0-6.09h1.52v1.52h-1.52Zm-1.52 19.81h1.52v1.52h-1.52Zm0-6.1h3.04v1.53h-3.04Zm0-12.19h1.52v1.53h-1.52Zm0-3.04h1.52v1.52h-1.52Zm-1.53 16.76h1.53v1.52h-1.53Zm0-12.19h1.53v1.52h-1.53Zm0-6.1h1.53v1.53h-1.53Zm-1.52 27.43h1.52v1.52h-1.52Zm0-7.62h1.52v1.53h-1.52Zm0-12.19h1.52v1.52h-1.52Zm0-9.14h1.52v1.52h-1.52Zm-1.52 22.86h1.52v6.09h-1.52ZM16.76.765h1.53v3.05h-1.53Zm-1.52 3.05h1.52v4.57h-1.52Zm-1.53 4.57h1.53v3.04h-1.53Zm-1.52 15.24h1.52v6.09h-1.52Zm-1.52 6.09h1.52v1.52h-1.52Zm0-7.62h1.52v1.53h-1.52Zm0-12.19h1.52v1.52h-1.52Zm0-9.14h1.52v1.52h-1.52Zm-1.53 19.81h1.53v1.52H9.14Zm0-12.19h1.53v1.52H9.14Zm0-6.1h1.53v1.53H9.14Zm-1.52 22.86h1.52v1.52H7.62Zm-1.52-6.1h3.04v1.53H6.1Zm1.52-12.19h1.52v1.53H7.62Zm0-3.04h1.52v1.52H7.62ZM6.1 23.625h1.52v1.52H6.1Zm0-12.2h1.52v4.58H6.1Zm0-6.09h1.52v1.52H6.1Zm-1.53 24.38H6.1v1.52H4.57Zm0-9.14H6.1v3.05H4.57Zm0-4.57H6.1v3.04H4.57Zm0-6.1H6.1v1.52H4.57Zm-1.52 16.76h1.52v3.05H3.05Zm0-15.24h1.52v1.53H3.05Zm-1.53 12.2h1.53v3.04H1.52Zm0-10.67h1.53v3.05H1.52ZM0 16.005h1.52v7.62H0Z"/></symbol>
+<symbol id="cap" viewBox="0 0 32 32"><path fill="currentColor" d="M30.47 7.61h-1.52v3.05H25.9v1.53h-3.05v1.52h3.05v4.57h-1.52v1.53h1.52v3.04h1.52V12.19h1.53V25.9h-1.53V32H32v-6.1h-1.53zM25.9 6.09h3.05v1.52H25.9Z"/><path fill="currentColor" d="M24.38 22.85h1.52v1.53h-1.52ZM19.8 9.14h6.1v1.52h-6.1Zm3.05-4.57h3.05v1.52h-3.05Zm-1.52 19.81h3.05v1.52h-3.05Zm0-4.57h3.05v1.52h-3.05Zm-1.53-6.1h3.05v1.52H19.8Zm0-10.67h3.05v1.53H19.8ZM9.14 25.9h12.19v1.52H9.14Zm0-4.57h12.19v1.52H9.14Zm7.62-6.1h3.04v1.53h-3.04Zm-3.05-7.62h6.09v1.53h-6.09Zm3.05-6.09h3.04v1.52h-3.04ZM13.71 0h3.05v1.52h-3.05Zm0 16.76h3.05v1.52h-3.05ZM10.66 1.52h3.05v1.52h-3.05Zm0 13.71h3.05v1.53h-3.05ZM7.61 3.04h3.05v1.53H7.61ZM6.09 24.38h3.05v1.52H6.09Zm0-4.57h3.05v1.52H6.09Zm1.52-6.1h3.05v1.52H7.61ZM4.57 4.57h3.04v1.52H4.57Zm0 18.28h1.52v1.53H4.57Zm1.52-3.04v-1.53H4.57v-4.57h3.04v-1.52H4.57v-1.53H1.52v1.53h1.52v10.66h1.53v-3.04zM1.52 6.09h3.05v1.52H1.52ZM0 7.61h1.52v3.05H0Z"/></symbol>
+<symbol id="linkedin" viewBox="0 0 32 32"><path fill="currentColor" d="M30.47 3.05H32v25.9h-1.53Zm-1.52 25.9h1.52v1.53h-1.52Zm0-27.43h1.52v1.53h-1.52Zm-1.53 3.05h1.53v22.86h-1.53ZM3.04 30.48h25.91V32H3.04Zm1.53-3.05h22.85v1.52H4.57Zm18.28-12.19h-1.52v-1.53h-3.05v1.53h-1.52v-1.53h-3.05v9.15h3.05v-4.57h1.52v-1.53h1.53v1.53h1.52v4.57h3.05v-6.1h-1.53zM7.61 13.71h3.05v9.15H7.61Zm0-4.57h3.05v3.05H7.61ZM4.57 3.05h22.85v1.52H4.57ZM3.04 0h25.91v1.52H3.04Zm0 4.57h1.53v22.86H3.04ZM1.52 28.95h1.52v1.53H1.52Zm0-27.43h1.52v1.53H1.52ZM0 3.05h1.52v25.9H0Z"/></symbol>
+<symbol id="pdf" viewBox="0 0 32 32"><path fill="currentColor" d="M30.472 6.1H25.9V1.525h1.53V0H6.092v12.2h-1.52v1.52h1.52v3.05h-1.52v-3.05h-1.52v12.19h1.52v1.52h1.52V32H32V4.575h-1.53ZM7.622 18.285h4.57v4.57h-3.05v3.05h-1.52Zm22.85 12.19H7.622v-3.05H25.9v-1.52h1.53v-7.62H25.9v-1.52H7.622V1.525h16.76v6.09h6.09Zm-12.19-10.67v4.58h-1.52v1.52h-3.05v-7.62h3.05v1.52Zm6.1 1.53v1.52h-3.05v3.05h-1.52v-7.62h4.57v1.52h-3.05v1.53Z"/><path fill="currentColor" d="M28.952 3.045h1.52v1.53h-1.52Zm-1.52-1.52h1.52v1.52h-1.52Zm-12.19 18.28h1.52v4.58h-1.52Zm-6.1 0h1.53v1.53h-1.53Z"/></symbol>
+<symbol id="paper" viewBox="0 0 32 32"><path fill="currentColor" d="M30.472 9.145h1.53v19.81h-1.53Zm-1.52 19.81h1.52v1.52h-1.52Zm-1.52-16.76h1.52v15.23h-1.52Zm0 16.76h-1.53v1.52H3.052v1.52h25.9v-1.52h-1.52z"/><path fill="currentColor" d="M24.382 28.955h1.52V9.145h4.57v-1.53h-4.57v-4.57h-1.52zm-18.29-1.53h16.77v1.53H6.092Zm12.19-12.19h4.58v4.57h-4.58Zm-6.09 0h4.57v1.53h-4.57Zm0 3.05h4.57v1.52h-4.57Zm-9.14 6.1h19.81v1.52H3.052Zm0-3.05h19.81v1.52H3.052Zm0-3.05h7.62v1.52h-7.62Zm0-3.05h7.62v1.53h-7.62Zm19.81-1.52V6.1H3.052v7.62Zm-18.29-6.1h6.1v1.53h-1.53v1.52h-1.52V12.2h-3.05Zm-3.05-6.09h22.86v1.52H1.522Zm0 27.43h1.53v1.52h-1.53ZM.002 3.045h1.52v25.91H.002Z"/></symbol>
+<symbol id="mic" viewBox="0 0 32 32"><path fill="currentColor" d="M17.53 12.19v1.53h1.52v-1.53h6.09v1.53h1.53v-1.53h1.52v3.05h1.53v-3.05h1.52V6.1h-1.52V3.05h-1.53V6.1h-1.52V4.57h-1.53V6.1h-6.09V4.57h-1.52V6.1H16V3.05h-1.52V6.1h-1.53v6.09h1.53v3.05H16v-3.05Zm9.14-4.57h3.05v3.05h-3.05Zm-7.62 0h6.09v3.05h-6.09Zm-4.57 3.05V7.62h3.05v3.05Z"/><path fill="currentColor" d="M23.62 28.96h1.52v-1.53h1.53V16.76h1.52v-1.52h-3.05v-1.52h-1.52v3.04h-3.05v-3.04h-1.52v1.52H16v1.52h1.53v10.67h1.52v1.53h1.52v1.52h3.05Zm-4.57-4.58v-4.57h1.52v4.57Zm3.05 3.05h-1.53v-1.52h1.53ZM16 30.48h4.57V32H16Zm3.05-25.91h1.52V1.53h3.05v3.04h1.52V3.05h3.05V1.53h-3.05V0h-6.09v1.53H16v1.52h3.05zm-4.57 24.39H16v1.52h-1.52Zm-1.53-1.53h1.53v1.53h-1.53Zm-1.52-3.05h1.52v3.05h-1.52Zm-4.57-1.52h4.57v1.52H6.86Zm-1.52 1.52h1.52v1.53H5.34Zm-1.53 1.53h1.53v1.52H3.81ZM.76 27.43h3.05v1.53H.76Z"/></symbol>
+<symbol id="trophy" viewBox="0 0 32 32"><path fill="currentColor" d="M29.715 5.34h1.52v7.61h-1.52Zm-3.05 0h3.05V3.81h-3.05V2.29h-1.52v15.24h1.52v-3.05h3.05v-1.53h-3.05zm-3.05 12.19h1.53v1.52h-1.53Zm-1.52 1.52h1.52v1.52h-1.52ZM9.905 29.72v-1.53h-1.52v1.53h-1.53v1.52h18.29v-1.52h-1.53v-1.53h-1.52v1.53z"/><path fill="currentColor" d="M19.045 26.67h3.05v1.52h-3.05Zm0-6.1h3.05v1.53h-3.05Zm-1.52-12.19V5.34h-3.05v3.04h-4.57v1.53h1.52v1.52h1.53v1.52h-1.53V16h3.05v-1.52h3.05V16h3.05v-3.05h-1.53v-1.52h1.53V9.91h1.52V8.38zm0 13.72h1.52v4.57h-1.52Zm-4.57 0h1.52v4.57h-1.52Zm-3.05 4.57h3.05v1.52h-3.05Zm0-6.1h3.05v1.53h-3.05Zm-1.52-1.52h1.52v1.52h-1.52ZM6.855.76h18.29v1.53H6.855Zm0 16.77h1.53v1.52h-1.53Zm0-15.24h-1.52v1.52h-3.05v1.53h3.05v7.61h-3.05v1.53h3.05v3.05h1.52zM.765 5.34h1.52v7.61H.765Z"/></symbol>
+<symbol id="robot" viewBox="0 0 32 32"><path fill="currentColor" d="M30.47 18.28V7.62h-1.52v9.14h-1.52v-1.52H25.9v12.19h1.53V25.9h3.04v-1.52H32v-6.1zm-6.09-6.09h1.52v3.05h-1.52ZM6.09 27.43v1.52h1.53v1.53h1.52v-1.53h13.71v1.53h1.53v-1.53h1.52v-1.52zm16.76-9.15h1.53v3.05h-1.53Zm0-7.61h1.53v1.52h-1.53Zm-3.04 6.09h3.04v1.52h-3.04ZM9.14 30.48h13.71V32H9.14Zm10.67-9.15h3.04v1.53h-3.04Zm-1.53-3.05h1.53v3.05h-1.53Zm0-16.76h1.53v1.53h-1.53Zm-4.57 22.86h4.57v1.52h-4.57Zm0-24.38h4.57v1.52h-4.57Zm-1.52 18.28h1.52v3.05h-1.52Zm0-16.76h1.52v1.53h-1.52ZM9.14 16.76h3.05v1.52H9.14Zm13.71-6.09V9.14h-6.09V4.57h1.52V3.05h-4.57v1.52h1.52v4.57H9.14v1.53z"/><path fill="currentColor" d="M9.14 21.33h3.05v1.53H9.14Zm-1.52-3.05h1.52v3.05H7.62Zm0-7.61h1.52v1.52H7.62Zm-1.53 1.52h1.53v3.05H6.09Zm0 3.05H4.57v1.52H3.04V7.62H1.52v10.66H0v6.1h1.52v1.52h3.05v1.53h1.52z"/></symbol>
+<symbol id="laptop" viewBox="0 0 32 32"><path fill="currentColor" d="M30.47 26.665H1.52v-3.05H0v4.57h1.52v1.53h28.95v-1.53H32v-4.57h-1.53z"/><path fill="currentColor" d="M28.95 20.565h1.52v3.05h-1.52Zm-10.67-9.14h1.53v1.52h-1.53Zm-4.57 12.19h4.57v1.52h-4.57Zm1.53-12.19h1.52v1.52h-1.52Zm-3.05 0h1.52v1.52h-1.52Zm-7.62-9.14h22.86v1.52H4.57Z"/><path fill="currentColor" d="M28.95 20.565V3.805h-1.52v15.24H4.57V3.805H3.05v16.76zm-27.43 0h1.53v3.05H1.52Z"/></symbol>
+<symbol id="refresh" viewBox="0 0 32 32"><path fill="currentColor" d="M27.43 12.19h1.52v7.62h-1.52Zm-1.52 7.62h1.52v3.05h-1.52Zm0-10.67h1.52v3.05h-1.52Zm1.52-1.52V6.1h1.52V4.57h-7.62v7.62h1.53v-1.52h1.52V9.14h1.53V7.62zm-3.05 15.24h1.53v1.52h-1.53Zm-1.52 1.52h1.52v1.53h-1.52Zm-3.05 1.53h3.05v1.52h-3.05Zm-6.1 1.52h6.1v1.52h-6.1ZM12.19 3.05h6.1v1.52h-6.1ZM9.14 4.57h3.05V6.1H9.14ZM7.62 6.1h1.52v1.52H7.62ZM6.1 7.62h1.52v1.52H6.1ZM4.57 24.38v1.53H3.05v1.52h7.62v-7.62H9.14v1.52H7.62v1.53H6.1v1.52z"/><path fill="currentColor" d="M4.57 19.81H6.1v3.05H4.57Zm0-10.67H6.1v3.05H4.57Zm-1.52 3.05h1.52v7.62H3.05Z"/></symbol>
+<symbol id="moon" viewBox="0 0 32 32"><path fill="currentColor" d="M27.43 12.185h1.52v7.62h-1.52Zm-1.53 7.62h1.53v3.05H25.9Zm0-10.66h1.53v3.04H25.9Zm-1.52 13.71h1.52v1.52h-1.52Zm0-15.24h1.52v1.53h-1.52Zm-1.53 16.76h1.53v1.53h-1.53Zm0-7.61h1.53v1.52h-1.53Zm0-10.67h1.53v1.52h-1.53Zm-3.04 6.09h3.04v3.05h-3.04Zm0 13.72h3.04v1.52h-3.04Zm0-16.76h1.52v1.52h-1.52Zm0-4.58h3.04v1.53h-3.04Zm-7.62 22.86h7.62v1.53h-7.62Zm4.57-7.62h3.05v3.05h-3.05Zm-3.05 4.57h1.53v1.53h-1.53Zm0-9.14h1.53v1.53h-1.53Zm-1.52-12.19h7.62v1.52h-7.62Zm0 4.57h3.05v3.05h-3.05Zm-3.05 18.29h3.05v1.52H9.14Zm1.52-4.57h1.53v1.52h-1.53ZM9.14 4.565h3.05v1.53H9.14Zm-1.52 19.81h1.52v1.53H7.62Zm0-12.19h1.52v1.53H7.62Zm0-6.09h1.52v1.52H7.62Zm-1.53 16.76h1.53v1.52H6.09Zm0-7.62h3.05v3.05H6.09Zm0-7.62h1.53v1.53H6.09Zm-1.52 12.19h1.52v3.05H4.57Zm0-10.66h1.52v3.04H4.57Zm-1.52 3.04h1.52v7.62H3.05Z"/></symbol>
+<symbol id="sun" viewBox="0 0 32 32"><path fill="currentColor" d="M30.47 19.055H32v6.09h-1.53Zm-1.52-7.62H32v1.52h-3.05Zm0 13.71h1.52v1.53h-1.52Zm0-7.62h1.52v1.53h-1.52Zm0-13.71h1.52v1.52h-1.52Zm-1.52 22.86h1.52v1.52h-1.52Zm0-10.67h1.52v1.52h-1.52Zm0-10.67h1.52v1.53h-1.52ZM3.05 28.195h24.38v1.52H3.05Zm18.28-12.19h1.52v1.52h-1.52Zm0-13.72h1.52v3.05h-1.52Zm-1.52 15.24h1.52v1.53h-1.52Zm-4.57-12.19h1.52v1.53h-1.52Zm-1.53-1.52h1.53v1.52h-1.53Zm0 6.09h4.57v1.53h3.05v1.52h1.52v3.05h4.58v-6.1H25.9v-1.52h-1.52v-1.52h-4.57v1.52h-7.62v1.52h-1.53v1.53h3.05zm-3.05 9.15h1.53v1.52h-1.53Zm-1.52-1.53h1.52v1.53H9.14Zm0-6.09h1.52v1.52H9.14Zm0 6.09v-4.57H7.62v3.05H3.05v1.52zm-7.62 9.15h1.53v1.52H1.52Zm0-9.15h1.53v1.53H1.52ZM0 19.055h1.52v7.62H0Z"/></symbol>
+<symbol id="dice" viewBox="0 0 32 32"><path fill="currentColor" d="M17.525 31.24v-1.52h3.04v-1.53h3.05v-1.52h3.05v-1.53h1.52v-1.52h1.53V8.38h-1.53V6.86h-1.52v1.52h-3.05v1.53h-3.05v1.52h-3.04v1.52h-3.05v1.53H16v15.24h-1.52v1.52Zm6.09-18.29h3.05v1.53h-3.05Zm-4.57 9.15H22.1v3.04h-3.05Zm4.57-16.76h3.05v1.52h-3.05Zm-3.05-1.53h3.05v1.53h-3.05Zm-3.04-1.52h3.04v1.52h-3.04Zm-3.05 4.57h3.05v3.05h-3.05Zm0-6.1h3.05v1.53h-3.05Zm-3.05 27.43h3.05v1.53h-3.05Z"/><path fill="currentColor" d="M11.425 11.43h3.05v1.52h-3.05Zm0-9.14h3.05v1.52h-3.05Zm0 19.81h3.05v3.04h-3.05Zm0-6.1h3.05v3.05h-3.05Zm-3.05 10.67h3.05v1.52h-3.05Zm0-16.76h3.05v1.52h-3.05Zm0-6.1h3.05v1.53h-3.05Zm-3.04 21.33h3.04v1.53h-3.04Zm0-16.76h3.04v1.53h-3.04Zm0-3.04h3.04v1.52h-3.04Zm0 13.71h3.04v3.05h-3.04Zm0-6.1h3.04V16h-3.04Zm-1.53 10.67h1.53v1.52h-1.53Zm0-16.76h1.53v1.52h-1.53Zm-1.52 1.52h1.52v15.24h-1.52Z"/></symbol>
+<symbol id="pin" viewBox="0 0 32 32"><path fill="currentColor" d="M25.905 7.61h1.52v7.62h-1.52Zm-1.52 7.62h1.52v4.57h-1.52Zm0-10.66h1.52v3.04h-1.52Zm-1.53 15.23h1.53v3.05h-1.53Zm0-16.76h1.53v1.53h-1.53Zm-1.52 19.81h1.52v3.05h-1.52Zm0-10.66h-1.52V9.14h-1.53V7.61h-1.52V6.09h1.52V4.57h-4.57v1.52h-1.52v1.52h-1.53v1.53h-1.52v4.57h1.52v1.52h1.53v1.53h1.52v1.52h4.57v-1.52h1.53v-1.53h1.52v-1.52h1.52V9.14h-1.52zm-1.52 13.71h1.52v1.52h-1.52Z"/><path fill="currentColor" d="M19.815 7.61h1.52v1.53h-1.52Zm0-6.09h3.04v1.52h-3.04Zm-1.53 25.9h1.53v1.53h-1.53Zm0-21.33h1.53v1.52h-1.53Zm-1.52 22.86h1.52v1.52h-1.52Zm-1.53 1.52h1.53V32h-1.53Zm-1.52-1.52h1.52v1.52h-1.52ZM12.195 0h7.62v1.52h-7.62Zm0 27.42h1.52v1.53h-1.52Zm-1.53-1.52h1.53v1.52h-1.53ZM9.145 1.52h3.05v1.52h-3.05Zm0 21.33h1.52v3.05h-1.52Zm-1.53-3.05h1.53v3.05h-1.53Zm0-16.76h1.53v1.53h-1.53Zm-1.52 12.19h1.52v4.57h-1.52Zm0-10.66h1.52v3.04h-1.52Zm-1.52 3.04h1.52v7.62h-1.52Z"/></symbol>
+<symbol id="flask" viewBox="0 0 32 32"><path fill="currentColor" d="M27.425 18.28h1.53v7.62h-1.53Zm-1.52 7.62h1.52v3.05h-1.52Zm0-10.67h1.52v3.05h-1.52Zm-1.52 13.72h1.52v1.52h-1.52Zm0-15.24h1.52v1.52h-1.52Zm-1.53 4.57h1.53v1.53h-1.53Zm0-6.09h1.53v1.52h-1.53ZM7.615 30.47h16.77V32H7.615Zm12.19-19.81h3.05v1.53h-3.05Zm-1.52 4.57h1.52v1.53h-1.52Zm-3.05 4.58h1.53v1.52h-1.53Zm-3.04-4.58h1.52v1.53h-1.52Zm1.52-13.71h4.57v9.14h1.52V1.52h1.53V0h-10.67v1.52h1.53v9.14h1.52zm-4.57 9.14h3.05v1.53h-3.05Zm0 7.62h1.52v1.53h-1.52Z"/><path fill="currentColor" d="M7.615 27.42h1.53v1.53h13.71v-1.53h1.53V25.9h1.52v-3.05h-1.52v-1.52h-3.05v1.52h-1.53v1.53h-4.57v-1.53h-3.04v-1.52h-4.58v1.52h-1.52v3.05h1.52zm0-15.23h1.53v1.52h-1.53Zm-1.52 16.76h1.52v1.52h-1.52Zm0-15.24h1.52v1.52h-1.52ZM4.575 25.9h1.52v3.05h-1.52Zm0-10.67h1.52v3.05h-1.52Zm-1.53 3.05h1.53v7.62h-1.53Z"/></symbol>
+<symbol id="book" viewBox="0 0 32 32"><path fill="currentColor" d="M28.95 8.38h1.53v18.29h-1.53Zm-3.04 18.29h3.04v1.52h-3.04Zm-3.05-1.53h3.05v1.53h-3.05Zm-4.57-1.52h4.57v1.52h-4.57ZM19.81 16h4.57v1.52h-4.57Zm0-4.57h4.57v1.52h-4.57Zm0-4.57h4.57v1.52h-4.57Zm-1.52-3.05h7.62v1.52h-7.62Zm0 9.14h1.52v1.53h-1.52Zm0-4.57h1.52v1.53h-1.52Zm-1.53-3.05h1.53v1.53h-1.53Zm-3.04 19.81h4.57v1.53h-4.57Zm0-19.81h1.52v1.53h-1.52ZM9.14 23.62h4.58v1.52H9.14Zm3.05-10.67h1.53v1.53h-1.53Zm0-4.57h1.53v1.53h-1.53ZM7.62 16h4.57v1.52H7.62Zm0-4.57h4.57v1.52H7.62Zm0-4.57h4.57v1.52H7.62ZM6.1 3.81h7.62v1.52H6.1Zm0 21.33h3.04v1.53H6.1Z"/><path fill="currentColor" d="M13.72 20.57v-1.52H9.14v1.52H6.1V5.33H4.57v1.53H3.05v1.52h1.52v15.24h4.57V22.1h4.58v1.52h4.57V22.1h4.57v1.52h4.57V8.38h1.52V6.86h-1.52V5.33h-1.52v15.24h-3.05v-1.52h-4.57v1.52h-1.53V6.86h-1.52v13.71zm-10.67 6.1H6.1v1.52H3.05ZM1.52 8.38h1.53v18.29H1.52Z"/></symbol>
+<symbol id="link" viewBox="0 0 32 32"><path fill="currentColor" d="M30.48 12.195H32v7.62h-1.52Zm-1.53 7.62h1.53v1.52h-1.53Zm0-9.15h1.53v1.53h-1.53Zm-1.52 3.05h1.52v4.57h-1.52Zm-7.62 7.62h9.14v1.52h-9.14Zm0-12.19h9.14v1.52h-9.14Zm-1.52 10.67h1.52v1.52h-1.52Zm3.05-1.53v1.53h6.09v-1.53h-4.57v-1.52h1.52v-1.53h-1.52v-1.52h4.57v-1.52h-6.09v1.52h-3.05v-1.52h-1.53v1.52h-1.52v-1.52h-1.52v1.52h-3.05v-1.52h-6.1v1.52h4.58v1.52H7.62v1.53h1.53v1.52H4.57v1.53h6.1v-1.53h3.05v1.53h1.52v-1.53h1.52v1.53h1.53v-1.53zm-3.05-7.62h1.52v1.53h-1.52Zm-6.1 9.15h1.53v1.52h-1.53Zm0-9.15h1.53v1.53h-1.53Zm-9.14 10.67h9.14v1.52H3.05Zm0-12.19h9.14v1.52H3.05Z"/><path fill="currentColor" d="M3.05 13.715h1.52v4.57H3.05Zm-1.52 6.1h1.52v1.52H1.53Zm0-9.15h1.52v1.53H1.53ZM0 12.195h1.53v7.62H0Z"/></symbol>
+<symbol id="coffee" viewBox="0 0 32 32"><path fill="currentColor" d="M25.91 10.67H6.1V7.62H4.57v4.57H6.1v9.14h1.52v6.1h1.53v-1.52h13.71v1.52h1.52v-6.1h1.53v-9.14h1.52V7.62h-1.52Zm-3.05 13.71H9.15v-1.52h13.71Zm0-4.57h-1.52v1.52h-1.53v-1.52h-1.52v1.52h-1.53v-1.52h-1.52v1.52h-1.52v-1.52h-1.53v1.52h-1.52v-1.52H9.15v-1.52h1.52v1.52h1.52v-1.52h1.53v1.52h1.52v-1.52h1.52v1.52h1.53v-1.52h1.52v1.52h1.53v-1.52h1.52Zm1.52-3.05H7.62v-1.52h16.76Zm0-3.04H7.62v-1.53h16.76ZM19.81 0h4.57v1.52h-4.57Zm1.53 30.48H10.67v-3.05H9.15V32h13.71v-4.57h-1.52zM18.29 1.52h1.52v1.53h-1.52ZM7.62 3.05h10.67v1.52H7.62Z"/><path fill="currentColor" d="M25.91 7.62v-6.1h-1.53V6.1H7.62V4.57H6.1v3.05z"/></symbol>
+<symbol id="arcade" viewBox="0 0 32 32"><path fill="currentColor" d="M30.47 6.1H32V32h-1.53Zm-1.52-1.53h1.52V6.1h-1.52Zm-1.53-1.52h1.53v1.52h-1.53ZM25.9 1.52h1.52v1.53H25.9Z"/><path fill="currentColor" d="M3.04 0v6.1h1.53v1.52h1.52v13.71H4.57v1.53H3.04v1.52H1.52v1.52h19.81V32h1.52v-7.62h1.53v-1.52h1.52v-1.53h1.52V7.62H25.9V6.1h-1.52V1.52h1.52V0Zm7.62 1.52h12.19v3.05H10.66Zm-3.05 0h1.53v3.05H7.61ZM4.57 4.57V1.52h1.52v3.05Zm4.57 18.29H7.61v1.52H6.09v-1.52h1.52v-1.53h1.53Zm4.57 0h-1.52v1.52h-1.53v-1.52h1.53v-1.53h1.52Zm7.62 1.52h-4.57v-1.52h4.57Zm1.52-4.57H10.66v-9.14h12.19Zm1.53-10.67H7.61V7.62h16.77Z"/><path fill="currentColor" d="M19.8 15.24h1.53v1.52H19.8Zm-1.52-3.05h1.52v1.52h-1.52ZM19.8 32v-3.05h-4.57V32h1.53v-1.52h1.52V32zm-6.09-15.24h6.09v1.53h-6.09Zm0-4.57h1.52v1.52h-1.52Zm-1.52 3.05h1.52v1.52h-1.52ZM0 25.9h1.52V32H0Z"/></symbol>
 </svg>
 
-<!-- PRELOADER -->
-<div id="preloader" aria-hidden="true">
-  <div class="pl-top"><span class="mono">Mohamed Rissal Hedna ©</span><span class="mono">Hamburg, DE</span></div>
-  <div class="pl-mid">
-    <div id="pl-count">0<span class="pct">%</span></div>
-    <div class="pl-word">Calibrating<br><span style="color:var(--red)">confidence</span></div>
-  </div>
-  <div class="pl-bar"><i></i></div>
-</div>
+        <header>
+            <div class="wrap">
+                <a class="brand" href="#top">Rissal Hedna</a>
+                <nav aria-label="Main">
+                    <a class="hide-sm" href="#research">Research</a>
+                    <a class="hide-sm" href="#publications">Publications</a>
+                    <a class="hide-sm" href="#talks">Talks</a>
+                    <a href="assets/Rissal-Hedna-CV.pdf">CV</a>
+                    <button
+                        class="theme"
+                        id="theme"
+                        type="button"
+                        aria-label="Toggle dark mode"
+                    >
+                        <svg class="i sun-only"><use href="#moon" /></svg
+                        ><svg class="i moon-only"><use href="#sun" /></svg>
+                    </button>
+                </nav>
+            </div>
+        </header>
 
-<!-- NAV -->
-<header class="nav">
-  <a class="brand" href="#hero">RISSAL<b>.</b></a>
-  <nav>
-    <a href="#news">News</a>
-    <a href="#focus">Focus</a>
-    <a href="#work">Work</a>
-    <a href="#talks">Talks</a>
-    <a href="#exp">Experience</a>
-    <a href="#contact">Contact</a>
-  </nav>
-</header>
+        <main class="wrap" id="top">
+            <div class="hero">
+                <div
+                    class="photo"
+                    id="photo"
+                    tabindex="0"
+                    aria-label="Photo of Rissal Hedna"
+                >
+                    <img
+                        src="assets/img/profile.jpg"
+                        alt="Portrait of Mohamed Rissal Hedna"
+                        width="150"
+                        height="150"
+                    />
+                    <span class="p" id="photo-p">P(this is Rissal) = 0.97</span>
+                </div>
+                <div>
+                    <h1>Mohamed Rissal Hedna</h1>
+                    <div class="role">
+                        <span>AI Researcher</span><span>·</span
+                        ><svg class="i"><use href="#pin" /></svg
+                        ><span>Hamburg, Germany</span>
+                    </div>
+                    <p class="lede">
+                        I study whether language models
+                        <b>know when they are wrong</b>: uncertainty
+                        quantification, calibration and trustworthy LLMs. First
+                        author of <a href="secl.html"><b>SECL</b></a>
+                        (EMNLP 2026 Main), a test-time training method that cuts
+                        calibration error by
+                        <span class="hl">56–78%</span> without labels. I also
+                        build hallucination detection and evaluation for agentic
+                        LLM systems in regulated life sciences at PHAROS Labs.
+                    </p>
+                    <div class="links">
+                        <a href="assets/Rissal-Hedna-CV.pdf"
+                            ><svg class="i"><use href="#pdf" /></svg>CV</a
+                        >
+                        <a
+                            href="https://scholar.google.com/citations?user=SiuhbDEAAAAJ&hl=en"
+                            target="_blank"
+                            rel="noopener"
+                            ><svg class="i"><use href="#cap" /></svg>Scholar</a
+                        >
+                        <a
+                            href="https://github.com/rissalhedna"
+                            target="_blank"
+                            rel="noopener"
+                            ><svg class="i"><use href="#code" /></svg>GitHub</a
+                        >
+                        <a
+                            href="https://www.linkedin.com/in/rissal-h-949486121/"
+                            target="_blank"
+                            rel="noopener"
+                            ><svg class="i"><use href="#linkedin" /></svg
+                            >LinkedIn</a
+                        >
+                        <a href="mailto:rissalhedna@gmail.com"
+                            ><svg class="i"><use href="#mail" /></svg
+                            >rissalhedna@gmail.com</a
+                        >
+                    </div>
+                    <div class="cta">
+                        <a class="btn solid" href="secl.html"
+                            >Try the SECL demo →</a
+                        >
+                        <a class="btn" href="#game"
+                            ><svg class="i"><use href="#dice" /></svg>Are
+                            <i>you</i> calibrated?</a
+                        >
+                    </div>
+                </div>
+            </div>
 
-<!-- HERO -->
-<section id="hero" class="wrap">
-  <div class="hero-meta mono">
-    <span>00_1 / Index</span>
-    <span>Applied Scientist · Research Engineer</span>
-    <span>Hamburg, DE</span>
-    <span>First author · SECL · EMNLP 2026</span>
-  </div>
-  <h1 class="hero-title">
-    <span class="cmyk" data-t="Rissal">Rissal</span>
-    <span class="outline">Hedna</span>
-  </h1>
-  <div class="hero-sub">
-    <p class="lede">
-      I work on <b>LLM calibration, safety, and evaluation</b>: making models honest about
-      what they know. First author of <b>SECL</b> (EMNLP 2026), with production experience building and
-      shipping large-scale generative and multi-agent systems.
-    </p>
-    <div class="hero-tags">
-      <span class="tag">Calibration</span>
-      <span class="tag">Safety</span>
-      <span class="tag">Evaluation</span>
-      <span class="tag">LLMs</span>
-    </div>
-  </div>
-  <div class="avail"><span class="pulse"></span>Open to research collaborations · Available for consulting</div>
-  <div class="hero-cta">
-    <a class="btn btn-primary" href="secl.html">▶ Try the live SECL demo</a>
-    <a class="btn btn-ghost" href="mailto:rissalhedna@gmail.com">Get in touch ↗</a>
-  </div>
-  <div class="scrollcue">↓ Scroll</div>
-</section>
+            <section id="news">
+                <h2>
+                    <svg class="i"><use href="#paper" /></svg>News
+                </h2>
+                <ul class="rows">
+                    <li>
+                        <span class="when">Nov 2026</span>
+                        <div>
+                            <span class="t">code.talks 2026, Hamburg.</span>
+                            <span class="d"
+                                >Talk: “Confidently Wrong: Teaching an LLM to
+                                Know When It Doesn’t Know”.
+                                <a href="#talks">More below</a></span
+                            >
+                        </div>
+                    </li>
+                    <li>
+                        <span class="when">Oct 2026</span>
+                        <div>
+                            <span class="t"
+                                >Presented SECL at EMNLP 2026, Budapest.</span
+                            >
+                            <span class="d"
+                                >Poster at the main conference; also a student
+                                volunteer.</span
+                            >
+                        </div>
+                    </li>
+                    <li>
+                        <span class="when">Aug 2026</span>
+                        <div>
+                            <span class="t"
+                                >SECL accepted to EMNLP 2026 (Main).</span
+                            >
+                            <span class="d"
+                                ><a
+                                    href="https://arxiv.org/abs/2604.09624"
+                                    target="_blank"
+                                    rel="noopener"
+                                    >Paper</a
+                                >
+                                ·
+                                <a
+                                    href="https://github.com/rissalhedna/SECL"
+                                    target="_blank"
+                                    rel="noopener"
+                                    >Code</a
+                                ></span
+                            >
+                        </div>
+                    </li>
+                    <li>
+                        <span class="when">Aug 2026</span>
+                        <div>
+                            <span class="t"
+                                >Released Darija LLM From Scratch.</span
+                            >
+                            <span class="d"
+                                >Two Colab notebooks: a BPE tokenizer and a
+                                10.6M-parameter GPT for Darija.
+                                <a
+                                    href="https://github.com/rissalhedna/darija-llm-from-scratch"
+                                    target="_blank"
+                                    rel="noopener"
+                                    >Repo</a
+                                ></span
+                            >
+                        </div>
+                    </li>
+                    <li>
+                        <span class="when">Aug 2026</span>
+                        <div>
+                            <span class="t">Joined PHAROS Labs full time</span>
+                            <span class="d"
+                                >as a Forward Deployed AI Engineer.</span
+                            >
+                        </div>
+                    </li>
+                </ul>
+            </section>
 
-<!-- MARQUEE -->
-<div class="marquee"><div class="track">
-  <span>LLM Calibration</span><span class="dot">✦</span><span>Test-Time Training</span><span class="dot">✦</span><span>Hallucination Detection</span><span class="dot">✦</span><span>Evaluation</span><span class="dot">✦</span><span>Uncertainty</span><span class="dot">✦</span>
-  <span>LLM Calibration</span><span class="dot">✦</span><span>Test-Time Training</span><span class="dot">✦</span><span>Hallucination Detection</span><span class="dot">✦</span><span>Evaluation</span><span class="dot">✦</span><span>Uncertainty</span><span class="dot">✦</span>
-</div></div>
+            <section id="research">
+                <h2>
+                    <svg class="i"><use href="#flask" /></svg>Research
+                </h2>
+                <p>
+                    Language models are often <b>confidently wrong</b>, and the
+                    confidence they state rarely tracks how often they are
+                    right. I work on closing that gap: measuring it, and
+                    training models to report uncertainty that you can actually
+                    act on.
+                </p>
+                <p>
+                    My current thrust is <a href="secl.html"><b>SECL</b></a
+                    >. Models are better at <i>judging</i> an answer than at
+                    <i>generating</i> one, so SECL uses the model’s own P(True)
+                    as label-free supervision and distills it into its stated
+                    confidence with a small online LoRA adapter, adapting only
+                    when the input distribution shifts. Interests: uncertainty
+                    quantification, probabilistic ML, hallucination detection,
+                    trustworthy LLMs and agents, and causality in language
+                    models.
+                </p>
 
-<!-- STATS -->
-<section id="stats" class="wrap">
-  <div class="stats-grid">
-    <div class="stat reveal"><div class="num" data-to="78" data-suf="%">0%</div><div class="lab">Fewer unsupported answers, customer-facing LLM features</div></div>
-    <div class="stat reveal"><div class="num" data-to="55" data-suf="%">0%</div><div class="lab">Lower end-to-end latency via eval and monitoring</div></div>
-    <div class="stat reveal"><div class="num" data-to="81" data-suf="%">0%</div><div class="lab">Fewer parameters, T5 trained from scratch</div></div>
-    <div class="stat reveal"><div class="num" data-to="3" data-suf="×">0×</div><div class="lab">Faster repeat renders via caching layer</div></div>
-    <div class="stat reveal"><div class="num" data-to="500" data-suf="+">0+</div><div class="lab">Active users on production generation</div></div>
-  </div>
-</section>
+                <div class="game" id="game" aria-live="polite">
+                    <div class="game-top">
+                        <span class="mono"
+                            ><svg class="i"><use href="#dice" /></svg>Are you
+                            better calibrated than an LLM?</span
+                        >
+                        <span class="mono muted" id="g-prog"></span>
+                    </div>
+                    <div id="g-play">
+                        <div class="stmt" id="g-stmt"></div>
+                        <div class="choices">
+                            <button class="btn" type="button" data-a="1">
+                                True
+                            </button>
+                            <button class="btn" type="button" data-a="0">
+                                False
+                            </button>
+                        </div>
+                        <div class="conf">
+                            <div class="lab">How sure are you?</div>
+                            <div class="chips" id="g-chips"></div>
+                        </div>
+                        <div class="fb" id="g-fb"></div>
+                    </div>
+                    <div id="g-res" hidden></div>
+                </div>
+            </section>
 
-<!-- NEWS -->
-<section id="news" class="wrap">
-  <div class="sec-head reveal"><span class="idx">00_2</span><h2>Latest</h2></div>
-  <div class="news-list">
+            <section id="publications">
+                <h2>
+                    <svg class="i"><use href="#book" /></svg>Publications
+                </h2>
 
-    <!-- EDIT: adjust dates to the exact months you want shown -->
-    <div class="news-item reveal">
-      <span class="when">Aug 2026</span>
-      <div>
-        <div class="n-title"><svg class="ico"><use href="#ico-paper"/></svg>SECL accepted at EMNLP 2026</div>
-        <div class="n-desc">
-          Self-Calibrating Language Models via Test-Time Discriminative Distillation was accepted to EMNLP 2026
-          in Budapest (October 24–29).
-          <a href="https://arxiv.org/abs/2604.09624" target="_blank" rel="noopener">Read the paper ↗</a>
-        </div>
-      </div>
-      <span class="n-flag">New</span>
-    </div>
+                <div class="pub">
+                    <div class="title">
+                        <a href="secl.html"
+                            >Self-Calibrating Language Models via Test-Time
+                            Discriminative Distillation</a
+                        >
+                    </div>
+                    <div class="auth">
+                        <b>Mohamed Rissal Hedna</b>, Jan Strich, Martin Semmann,
+                        Chris Biemann
+                    </div>
+                    <div class="venue">
+                        <span class="badge">EMNLP 2026</span
+                        ><span>Main Conference, Budapest</span>
+                        <a
+                            href="https://arxiv.org/abs/2604.09624"
+                            target="_blank"
+                            rel="noopener"
+                            >arXiv</a
+                        >
+                        <a
+                            href="https://github.com/rissalhedna/SECL"
+                            target="_blank"
+                            rel="noopener"
+                            >code</a
+                        >
+                        <a href="secl.html">project page + live demo</a>
+                    </div>
+                    <details>
+                        <summary>[ BibTeX ]</summary>
+                        <pre><button class="copy" type="button">copy</button>@inproceedings{hedna2026secl,
+  title     = {Self-Calibrating Language Models via Test-Time Discriminative Distillation},
+  author    = {Hedna, Mohamed Rissal and Strich, Jan and Semmann, Martin and Biemann, Chris},
+  booktitle = {Proceedings of the 2026 Conference on Empirical Methods in Natural Language Processing},
+  year      = {2026}
+}</pre>
+                    </details>
+                </div>
 
-    <div class="news-item reveal">
-      <span class="when">Aug 2026</span>
-      <div>
-        <div class="n-title"><svg class="ico"><use href="#ico-code"/></svg>Darija LLM from scratch, notebooks open</div>
-        <div class="n-desc">
-          Two Colab notebooks that build a Darija language model end to end: an 8K-token BPE tokenizer, then a
-          10.6M-parameter GPT trained on the Darija Wikipedia corpus. The recorded course goes up soon, the
-          code is already public.
-          <a href="https://github.com/rissalhedna/darija-llm-from-scratch" target="_blank" rel="noopener">Open the repo ↗</a>
-        </div>
-      </div>
-      <span class="n-flag">New</span>
-    </div>
+                <div class="pub">
+                    <div class="title">
+                        <a
+                            href="https://arxiv.org/abs/2511.19254"
+                            target="_blank"
+                            rel="noopener"
+                            >Adversarial Patch Attacks on Vision-Based Cargo
+                            Occupancy Estimation via Differentiable 3D
+                            Simulation</a
+                        >
+                    </div>
+                    <div class="auth">
+                        <b>Mohamed Rissal Hedna</b>, Sesugh Samuel Nder
+                    </div>
+                    <div class="venue">
+                        <span>Preprint, arXiv:2511.19254, 2025</span>
+                    </div>
+                </div>
 
-    <div class="news-item reveal">
-      <span class="when">Aug 2026</span>
-      <div>
-        <div class="n-title"><svg class="ico"><use href="#ico-case"/></svg>Joined PHAROS Labs full time</div>
-        <div class="n-desc">
-          Now a Forward Deployed AI Engineer at PHAROS Labs in Hamburg, working on agentic systems for
-          medical writing and regulated life sciences.
-        </div>
-      </div>
-      <span class="n-flag">New</span>
-    </div>
+                <div class="pub">
+                    <div class="title">
+                        <a
+                            href="https://ieeexplore.ieee.org/abstract/document/10337600"
+                            target="_blank"
+                            rel="noopener"
+                            >A Model for the Automatic Mixing of Multiple Audio
+                            and Video Clips</a
+                        >
+                    </div>
+                    <div class="auth">
+                        <b>Mohamed Rissal Hedna</b>, Y. Djemmal, K. Mershad
+                        Mershad
+                    </div>
+                    <div class="venue">
+                        <span
+                            >IEEE International Conference on Cyberworlds (CW),
+                            2023</span
+                        >
+                        <a
+                            href="https://github.com/rissalhedna/Automatic-Mixing-of-Audio-and-Video"
+                            target="_blank"
+                            rel="noopener"
+                            >code</a
+                        >
+                    </div>
+                </div>
+            </section>
 
-    <div class="news-item reveal">
-      <span class="when">2026</span>
-      <div>
-        <div class="n-title"><svg class="ico"><use href="#ico-cap"/></svg>MSc defended, University of Hamburg</div>
-        <div class="n-desc">
-          Finished the MSc in Intelligent Adaptive Systems with a final grade of 1.49, with the thesis work
-          that became SECL.
-        </div>
-      </div>
-      <span></span>
-    </div>
+            <section id="talks">
+                <h2>
+                    <svg class="i"><use href="#mic" /></svg>Talks
+                </h2>
+                <div class="talks">
+                    <div class="talk">
+                        <a
+                            class="img"
+                            href="https://www.codetalks.com/speaker/mohamed-rissal-hedna"
+                            target="_blank"
+                            rel="noopener"
+                        >
+                            <img
+                                src="assets/img/codetalks.jpg"
+                                alt="code.talks 2026 speaker page for Mohamed Rissal Hedna"
+                                loading="lazy"
+                            />
+                        </a>
+                        <div class="where">
+                            code.talks 2026 · Hamburg · Nov 4
+                        </div>
+                        <div class="tt">
+                            <a
+                                href="https://www.codetalks.com/speaker/mohamed-rissal-hedna"
+                                target="_blank"
+                                rel="noopener"
+                                >Confidently Wrong: Teaching an LLM to Know When
+                                It Doesn’t Know</a
+                            >
+                        </div>
+                    </div>
+                    <div class="talk">
+                        <a
+                            class="img"
+                            href="https://certified.fyi/c/54Z6hBsG-Fl6Zybnn-25NnXyZL-r9yqEUb9"
+                            target="_blank"
+                            rel="noopener"
+                        >
+                            <img
+                                src="assets/img/llmday.jpg"
+                                alt="Rissal presenting SECL to the audience at LLMDay Hamburg"
+                                loading="lazy"
+                            />
+                        </a>
+                        <div class="where">LLMDay Hamburg · 2026</div>
+                        <div class="tt">Self-Calibrating Language Models</div>
+                    </div>
+                </div>
+            </section>
 
-    <div class="news-item reveal">
-      <span class="when">2026</span>
-      <div>
-        <div class="n-title"><svg class="ico"><use href="#ico-mic"/></svg>Invited talk at LLMDay Hamburg</div>
-        <div class="n-desc">
-          Presented SECL and the generation–discrimination gap to the Hamburg LLM community.
-          <a href="#talks">See the talk below</a>
-        </div>
-      </div>
-      <span></span>
-    </div>
+            <section id="projects">
+                <h2>
+                    <svg class="i"><use href="#laptop" /></svg>Projects
+                </h2>
+                <ul class="rows">
+                    <li>
+                        <span class="when">2026</span>
+                        <div>
+                            <a
+                                class="t"
+                                href="https://github.com/rissalhedna/darija-llm-from-scratch"
+                                target="_blank"
+                                rel="noopener"
+                                >Darija LLM From Scratch</a
+                            >
+                            <div class="d">
+                                A course for Arabic-speaking developers: a BPE
+                                tokenizer with an Arabic-aware split pattern,
+                                then a 10.6M-parameter GPT trained on Darija
+                                Wikipedia, with a bits-per-character tokenizer
+                                ablation.
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="when">2024</span>
+                        <div>
+                            <a
+                                class="t"
+                                href="https://github.com/rissalhedna/Git-Commit-Message-Generation"
+                                target="_blank"
+                                rel="noopener"
+                                >T5-Efficient</a
+                            >
+                            <div class="d">
+                                T5 trained from scratch for commit-message
+                                generation, then shrunk 81% (17.7M → 3.3M
+                                parameters) through pruning and architecture
+                                search.
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="when">2024</span>
+                        <div>
+                            <a
+                                class="t"
+                                href="https://github.com/rissalhedna/unillm-backend"
+                                target="_blank"
+                                rel="noopener"
+                                >UniLLM</a
+                            >
+                            <div class="d">
+                                A dense-retrieval RAG assistant for students
+                                moving to Germany, with async streaming and an
+                                automated crawler.
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </section>
 
-  </div>
-</section>
+            <section id="experience">
+                <h2>
+                    <svg class="i"><use href="#robot" /></svg>Experience &amp;
+                    education
+                </h2>
+                <ul class="rows">
+                    <li>
+                        <span class="when">2024 – now</span>
+                        <div>
+                            <span class="t">AI Engineer, PHAROS Labs</span>
+                            <div class="d">
+                                Forward Deployed since Aug 2026, part-time
+                                before. Hallucination-detection layers that cut
+                                unsupported answers ~78% on production
+                                evaluation data; evaluation and monitoring for
+                                RAG pipelines.
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="when">2025 – 2026</span>
+                        <div>
+                            <span class="t"
+                                >Graduate Researcher, Language Technology Group,
+                                University of Hamburg</span
+                            >
+                            <div class="d">
+                                SECL, with Prof. Chris Biemann and Jan Strich.
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="when">2026</span>
+                        <div>
+                            <span class="t"
+                                >M.Sc. Intelligent Adaptive Systems, University
+                                of Hamburg</span
+                            >
+                            <div class="d">
+                                Grade 1.49. Thesis: SECL: Self-Calibrating
+                                Language Models.
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="when">2025</span>
+                        <div>
+                            <span class="t"
+                                >AI Engineer (Contract), Fiindo</span
+                            >
+                            <div class="d">
+                                Agentic pipeline turning raw financial data into
+                                narrated short-form video.
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="when">2023 – 2024</span>
+                        <div>
+                            <span class="t">ML Developer, AdaLab UG</span>
+                            <div class="d">
+                                Raised peak-load throughput ~60% on a multimodal
+                                generation platform serving 500+ active users.
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="when">2022</span>
+                        <div>
+                            <span class="t"
+                                >Visiting Research Assistant, Advanced
+                                Telerobotics Lab, Kent State University</span
+                            >
+                            <div class="d">
+                                Sub-50ms CNN obstacle detection on an embedded
+                                NVIDIA Jetson with LiDAR-vision fusion.
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="when">2019 – 2023</span>
+                        <div>
+                            <span class="t"
+                                >B.Sc. Computer Science, Lebanese American
+                                University</span
+                            >
+                            <div class="d">
+                                CGPA 3.91/4.0, High Distinction, MEPI Tomorrow’s
+                                Leaders scholar.
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+                <p class="muted" style="font-size: 15.5px; margin-top: 14px">
+                    Outside research I run <b>withrssle</b>, an education
+                    platform with a 130K audience that helps North African
+                    students access scholarships.
+                </p>
+            </section>
+        </main>
 
-<!-- FOCUS + DIAGRAM -->
-<section id="focus" class="wrap">
-  <div class="sec-head reveal"><span class="idx">00_3</span><h2>Focus</h2></div>
-  <div class="focus-grid">
-    <div class="reveal">
-      <p>
-        Language models are often <span class="hl">confidently wrong</span>, especially out of
-        distribution. My work is about closing that gap: aligning what a model says it knows
-        with what it actually does.
-      </p>
-      <p>
-        <b>SECL</b> is the current thrust. It calibrates a model at test time using its own
-        P("True") signal on synthetic data, no labels and no human supervision. The same instinct
-        runs through my production work: detect when a system is wrong, measure it, ship the fix.
-      </p>
-    </div>
-    <div class="diagram reveal">
-      <div class="d-top">
-        <span class="d-title">Reliability diagram</span>
-        <button class="recal" id="recal" type="button">Recalibrate ↻</button>
-      </div>
-      <svg id="relsvg" viewBox="0 0 320 260" aria-label="Reliability diagram showing an overconfident model recalibrating toward perfect calibration">
-        <!-- grid -->
-        <g stroke="rgba(239,233,220,.16)" stroke-width="1">
-          <line x1="40" y1="20" x2="40" y2="220"/><line x1="40" y1="220" x2="300" y2="220"/>
-          <line x1="105" y1="20" x2="105" y2="220"/><line x1="170" y1="20" x2="170" y2="220"/><line x1="235" y1="20" x2="235" y2="220"/>
-          <line x1="40" y1="170" x2="300" y2="170"/><line x1="40" y1="120" x2="300" y2="120"/><line x1="40" y1="70" x2="300" y2="70"/>
-        </g>
-        <!-- perfect calibration diagonal -->
-        <line x1="40" y1="220" x2="300" y2="20" stroke="var(--paper)" stroke-width="1.4" stroke-dasharray="4 5" opacity=".5"/>
-        <!-- model curve (animated) -->
-        <path id="curve" fill="none" stroke="var(--red)" stroke-width="3" stroke-linecap="round"/>
-        <!-- axis labels -->
-        <text x="170" y="248" fill="var(--paper)" font-family="Space Mono, monospace" font-size="10" text-anchor="middle" opacity=".7" letter-spacing="1">MODEL CONFIDENCE →</text>
-        <text x="14" y="120" fill="var(--paper)" font-family="Space Mono, monospace" font-size="10" text-anchor="middle" opacity=".7" letter-spacing="1" transform="rotate(-90 14 120)">ACTUAL ACCURACY →</text>
-      </svg>
-      <div class="d-legend">
-        <span><i style="background:var(--paper);opacity:.6"></i>Perfect calibration</span>
-        <span><i id="curve-swatch" style="background:var(--red)"></i><span id="curve-label">Overconfident model</span></span>
-      </div>
-    </div>
-  </div>
-</section>
+        <footer>
+            <div class="wrap">
+                <span
+                    >© 2026 Mohamed Rissal Hedna ·
+                    <span id="ptrue">P(True) ≈ calibrated</span></span
+                >
+                <span
+                    >Pixel icons by
+                    <a
+                        href="https://www.streamlinehq.com/icons/pixel"
+                        target="_blank"
+                        rel="noopener"
+                        >Streamline</a
+                    >
+                    (CC BY 4.0)</span
+                >
+            </div>
+        </footer>
 
-<!-- WORK -->
-<section id="work" class="wrap">
-  <div class="sec-head reveal"><span class="idx">00_4</span><h2>Selected Work</h2></div>
-  <div class="work">
-    <a class="work-item reveal" href="secl.html">
-      <span class="w-idx"><span class="feat">★</span> 01</span>
-      <div>
-        <div class="w-title">SECL</div>
-        <div class="w-desc">Self-Calibrating Language Models via Test-Time Discriminative Distillation. A test-time training pipeline that calibrates an LLM's confidence from its own P("True") signal on synthetic data, with no labels or human supervision.</div>
-        <div class="w-tags"><span class="w-tag">First author</span><span class="w-tag">Accepted · EMNLP 2026</span><span class="w-tag">▶ Live demo</span></div>
-      </div>
-      <div class="w-meta">INTERACTIVE<br>Run it yourself<br><span class="w-arrow">→</span></div>
-    </a>
-    <a class="work-item reveal" href="https://github.com/rissalhedna/darija-llm-from-scratch" target="_blank" rel="noopener">
-      <span class="w-idx"><span class="feat">★</span> 02</span>
-      <div>
-        <div class="w-title">Darija LLM<br>From Scratch</div>
-        <div class="w-desc">A two-part course for Arabic-speaking developers: code a BPE tokenizer from bytes up with an Arabic-aware split pattern, then build and train a 10.6M-parameter GPT on the Darija Wikipedia corpus. Includes a tokenizer ablation measuring bits-per-character, plus clean standalone implementations in under 550 lines. Adapted from Karpathy's minbpe and nanoGPT.</div>
-        <div class="w-tags"><span class="w-tag">Python · PyTorch</span><span class="w-tag">Tokenization</span><span class="w-tag">Transformers</span><span class="w-tag">2 Colab notebooks</span><span class="w-tag">Video course soon</span></div>
-      </div>
-      <div class="w-meta">COURSE<br>Run it in Colab<br><span class="w-arrow">↗</span></div>
-    </a>
-    <a class="work-item reveal" href="https://ieeexplore.ieee.org/abstract/document/10337600" target="_blank" rel="noopener">
-      <span class="w-idx">03</span>
-      <div>
-        <div class="w-title">Automatic AV Mixing</div>
-        <div class="w-desc">A Model for the Automatic Mixing of Multiple Video and Audio Clips. Published at the International Conference on Cyberworlds (CW).</div>
-        <div class="w-tags"><span class="w-tag">First author</span><span class="w-tag">IEEE CW 2023</span></div>
-      </div>
-      <div class="w-meta">PAPER<br>2023<br><span class="w-arrow">↗</span></div>
-    </a>
-    <a class="work-item reveal" href="https://arxiv.org/abs/2511.19254" target="_blank" rel="noopener">
-      <span class="w-idx">04</span>
-      <div>
-        <div class="w-title">Adversarial Patch Attacks</div>
-        <div class="w-desc">Simulated Adversarial Patch Attacks on Vision-Based Logistics Systems.</div>
-        <div class="w-tags"><span class="w-tag">Co-author</span><span class="w-tag">Vision · Robustness</span></div>
-      </div>
-      <div class="w-meta">PAPER<br>arXiv<br><span class="w-arrow">↗</span></div>
-    </a>
-    <a class="work-item reveal" href="https://github.com/rissalhedna/Git-Commit-Message-Generation" target="_blank" rel="noopener">
-      <span class="w-idx">05</span>
-      <div>
-        <div class="w-title">T5-Efficient</div>
-        <div class="w-desc">Trained T5 from scratch for git commit message generation, then cut parameters 81% (17.7M to 3.3M) via pruning and architecture work. Converged in under 12h on one GPU.</div>
-        <div class="w-tags"><span class="w-tag">PyTorch</span><span class="w-tag">Transformers</span><span class="w-tag">BF16</span></div>
-      </div>
-      <div class="w-meta">PROJECT<br><span class="w-arrow">↗</span></div>
-    </a>
-    <a class="work-item reveal" href="https://github.com/rissalhedna/unillm-backend" target="_blank" rel="noopener">
-      <span class="w-idx">06</span>
-      <div>
-        <div class="w-title">UniLLM</div>
-        <div class="w-desc">A dense-retrieval RAG assistant with async streaming and an automated crawler for German study and living data. Cut query resolution time 13% via better chunking and indexing.</div>
-        <div class="w-tags"><span class="w-tag">Qdrant</span><span class="w-tag">LlamaIndex</span><span class="w-tag">RAG</span></div>
-      </div>
-      <div class="w-meta">PROJECT<br><span class="w-arrow">↗</span></div>
-    </a>
-  </div>
-</section>
+        <script>
+            (function () {
+                /* theme toggle */
+                var root = document.documentElement;
+                document
+                    .getElementById("theme")
+                    .addEventListener("click", function () {
+                        var t =
+                            root.dataset.theme === "dark" ? "light" : "dark";
+                        root.dataset.theme = t;
+                        try {
+                            localStorage.setItem("theme", t);
+                        } catch (e) {}
+                    });
 
-<!-- MARQUEE ALT -->
-<div class="marquee alt"><div class="track">
-  <span>University of Hamburg</span><span class="dot">+</span><span>PHAROS Labs</span><span class="dot">+</span><span>Fiindo</span><span class="dot">+</span><span>AdaLab</span><span class="dot">+</span><span>Telerobotics Lab</span><span class="dot">+</span>
-  <span>University of Hamburg</span><span class="dot">+</span><span>PHAROS Labs</span><span class="dot">+</span><span>Fiindo</span><span class="dot">+</span><span>AdaLab</span><span class="dot">+</span><span>Telerobotics Lab</span><span class="dot">+</span>
-</div></div>
+                /* photo easter egg: every hover is a fresh, slightly-too-precise estimate */
+                var photo = document.getElementById("photo"),
+                    pp = document.getElementById("photo-p");
+                var quips = [
+                    "P(this is Rissal) = 0.97",
+                    "confidence: bin9 · verified",
+                    "P(True) = 0.98 · ECE 0.02",
+                    "P(smiling) = 1.00 · overconfident?",
+                ];
+                var qi = 0;
+                photo.addEventListener("mouseenter", function () {
+                    pp.textContent = quips[qi++ % quips.length];
+                });
+                photo.addEventListener("click", function () {
+                    photo.classList.toggle("on");
+                    pp.textContent = quips[qi++ % quips.length];
+                });
 
-<!-- TALKS -->
-<section id="talks" class="wrap">
-  <div class="sec-head reveal"><span class="idx">00_5</span><h2>Speaking</h2></div>
-  <div class="talk reveal">
-    <div class="talk-photo">
-      <img src="assets/pdf/Audience.jpg"/>
-      <span class="tp-tag">LLMDay Hamburg · 2026</span>
-    </div>
-    <div class="talk-body">
-      <div class="t-where">Invited talk · LLMDay Hamburg</div>
-      <h3>Self-Calibrating<br>Language Models</h3>
-      <p>LLMs often assert falsehoods with full confidence, especially on out-of-distribution tasks. This talk walks through SECL: using the generation–discrimination gap to train a model to double-check itself at inference time.</p>
-      <p>With lightweight LoRA updates on late transformer layers, a model's verbalized confidence is aligned to its own P("True") signal, and entropy-based gating keeps the compute overhead low enough to deploy.</p>
-      <a class="talk-cta" href="https://certified.fyi/c/54Z6hBsG-Fl6Zybnn-25NnXyZL-r9yqEUb9" target="_blank" rel="noopener">View certificate ↗</a>
-    </div>
-  </div>
-</section>
+                /* bibtex copy */
+                document.querySelectorAll(".copy").forEach(function (b) {
+                    b.addEventListener("click", function () {
+                        var txt = b.parentNode.textContent.replace(/^copy/, "");
+                        navigator.clipboard.writeText(txt).then(function () {
+                            b.textContent = "copied";
+                            setTimeout(function () {
+                                b.textContent = "copy";
+                            }, 1200);
+                        });
+                    });
+                });
 
-<!-- EXPERIENCE -->
-<section id="exp" class="wrap">
-  <div class="sec-head reveal"><span class="idx">00_6</span><h2>Experience</h2></div>
-  <div class="exp-grid">
-    <div class="exp-row reveal"><span class="yr">2026 → now</span><div><div class="role">Forward Deployed AI Engineer</div><div class="org">PHAROS Labs · Hamburg</div></div><div class="note">Client-facing AI development on agentic systems for medical writing and regulated life sciences, turning research-grade methods into things that ship.</div></div>
-    <div class="exp-row reveal"><span class="yr">2025 — 2026</span><div><div class="role">Graduate Researcher</div><div class="org">University of Hamburg</div></div><div class="note">Built SECL: test-time training that calibrates LLM confidence from the model's own P("True") on synthetic data, no labels needed. Beats verbalized-confidence baselines without their cost.</div></div>
-    <div class="exp-row reveal"><span class="yr">2024 — 2026</span><div><div class="role">AI Engineer</div><div class="org">PHAROS Labs · Hamburg</div></div><div class="note">Shipped hallucination-detection layers for customer-facing LLM features, cutting unsupported answers 78%. Ran weekly customer sessions and built eval and monitoring that cut latency 55%.</div></div>
-    <div class="exp-row reveal"><span class="yr">2025</span><div><div class="role">AI Engineer (Contract)</div><div class="org">Fiindo · Hamburg</div></div><div class="note">Built a full agentic pipeline solo, turning raw financial data into finished short-form videos (ingestion, narration, MANIM chart animation, render). A caching layer made repeat renders ~3x faster.</div></div>
-    <div class="exp-row reveal"><span class="yr">2023 — 2024</span><div><div class="role">Machine Learning Developer</div><div class="org">AdaLab UG · Hamburg</div></div><div class="note">Raised peak-load throughput 60% on a multimodal generation platform and stabilized production video generation for 500+ active users.</div></div>
-    <div class="exp-row reveal"><span class="yr">2022</span><div><div class="role">Visiting Research Assistant</div><div class="org">Advanced Telerobotics Lab · USA</div></div><div class="note">Built a C/Python CNN at sub-50ms inference on embedded NVIDIA Jetson for obstacle detection in GPS-denied environments, with LiDAR-vision sensor fusion under tight constraints.</div></div>
-  </div>
-</section>
+                /* ---------- calibration game ---------- */
+                var POOL = [
+                    [
+                        "Canberra is the capital of Australia.",
+                        1,
+                        "Not Sydney. The classic trap that LLMs fall into too.",
+                    ],
+                    [
+                        "Lightning never strikes the same place twice.",
+                        0,
+                        "The Empire State Building is hit around 20 times a year.",
+                    ],
+                    [
+                        "A day on Venus is longer than a year on Venus.",
+                        1,
+                        "One rotation takes ~243 Earth days; one orbit ~225.",
+                    ],
+                    [
+                        "Goldfish have a three-second memory.",
+                        0,
+                        "They can remember things for months.",
+                    ],
+                    [
+                        "Octopuses have three hearts.",
+                        1,
+                        "Two pump blood through the gills, one through the body.",
+                    ],
+                    [
+                        "The Great Wall of China is visible from space with the naked eye.",
+                        0,
+                        "Too narrow. Astronauts have confirmed it.",
+                    ],
+                    [
+                        "Bananas are berries, botanically speaking.",
+                        1,
+                        "Strawberries, on the other hand, are not.",
+                    ],
+                    [
+                        "Humans only use about 10% of their brains.",
+                        0,
+                        "Imaging shows virtually all of it is active.",
+                    ],
+                    [
+                        "Sharks have existed longer than trees.",
+                        1,
+                        "Sharks: ~450M years. Trees: ~385M years.",
+                    ],
+                    [
+                        "Glass is a very slow-flowing liquid.",
+                        0,
+                        "It is an amorphous solid; old windows are just unevenly made.",
+                    ],
+                    [
+                        "The Eiffel Tower is taller in summer than in winter.",
+                        1,
+                        "Thermal expansion adds roughly 15 cm.",
+                    ],
+                    [
+                        "Napoleon was unusually short for his time.",
+                        0,
+                        "He was about average; the myth came from unit confusion and propaganda.",
+                    ],
+                    [
+                        "A group of flamingos is called a flamboyance.",
+                        1,
+                        "Yes, really.",
+                    ],
+                    [
+                        "GPT stands for “General Purpose Transformer”.",
+                        0,
+                        "Generative Pre-trained Transformer.",
+                    ],
+                    [
+                        "The Transformer paper is titled “Attention Is All You Need”.",
+                        1,
+                        "Vaswani et al., 2017.",
+                    ],
+                    [
+                        "Mount Everest is the tallest mountain measured from base to peak.",
+                        0,
+                        "Mauna Kea wins at ~10,200 m, mostly underwater.",
+                    ],
+                ];
+                var CONFS = [50, 60, 70, 80, 90, 100],
+                    N = 8;
+                var els = {
+                    stmt: g("g-stmt"),
+                    chips: g("g-chips"),
+                    fb: g("g-fb"),
+                    prog: g("g-prog"),
+                    play: g("g-play"),
+                    res: g("g-res"),
+                };
+                var ansBtns = [].slice.call(
+                    document.querySelectorAll(".choices .btn"),
+                );
+                var qs, i, pick, log, locked;
+                function g(id) {
+                    return document.getElementById(id);
+                }
 
-<!-- CONTACT -->
-<section id="contact">
-  <div class="inner">
-    <div class="mono" style="opacity:.6;margin-bottom:18px">00_7 / Contact</div>
-    <div class="contact-big">Let's<br><a href="mailto:rissalhedna@gmail.com">work<br>together</a> <span class="blue">↗</span></div>
-    <div class="contact-links">
-      <a href="mailto:rissalhedna@gmail.com"><svg class="ico ico-dark" style="width:1.25em;height:1.25em"><use href="#ico-mail"/></svg>Email</a>
-      <a href="https://github.com/rissalhedna" target="_blank" rel="noopener"><svg class="ico ico-dark" style="width:1.25em;height:1.25em"><use href="#ico-git"/></svg>GitHub</a>
-      <a href="https://scholar.google.com/citations?user=SiuhbDEAAAAJ&hl=en" target="_blank" rel="noopener"><svg class="ico ico-dark" style="width:1.25em;height:1.25em"><use href="#ico-scholar"/></svg>Google Scholar</a>
-      <a href="https://www.linkedin.com/in/rissal-h-949486121/" target="_blank" rel="noopener"><svg class="ico ico-dark" style="width:1.25em;height:1.25em"><use href="#ico-link"/></svg>LinkedIn</a>
-    </div>
-    <div class="foot-meta"><span>© 2026 Mohamed Rissal Hedna</span><span>Hamburg, DE</span><span>P(True) ≈ calibrated</span></div>
-  </div>
-</section>
+                CONFS.forEach(function (c) {
+                    var b = document.createElement("button");
+                    b.type = "button";
+                    b.className = "chip";
+                    b.textContent = c + "%";
+                    b.addEventListener("click", function () {
+                        answer(c / 100);
+                    });
+                    els.chips.appendChild(b);
+                });
+                var chipBtns = [].slice.call(els.chips.children);
+                ansBtns.forEach(function (b) {
+                    b.addEventListener("click", function () {
+                        if (locked) return;
+                        pick = +b.dataset.a;
+                        ansBtns.forEach(function (x) {
+                            x.classList.toggle("on", x === b);
+                        });
+                        chipBtns.forEach(function (c) {
+                            c.disabled = false;
+                        });
+                    });
+                });
 
-<!-- STICKER -->
-<div id="sticker" title="drag me" aria-hidden="true">
-  <svg viewBox="0 0 120 120" class="spin">
-    <defs><path id="circ" d="M60,60 m-44,0 a44,44 0 1,1 88,0 a44,44 0 1,1 -88,0"/></defs>
-    <circle cx="60" cy="60" r="58" fill="var(--yellow)" stroke="var(--ink)" stroke-width="2"/>
-    <text font-family="Space Mono, monospace" font-size="11" font-weight="700" letter-spacing="2.5" fill="var(--ink)">
-      <textPath href="#circ" startOffset="0%">SELF-CALIBRATING · P(TRUE) · SELF-CALIBRATING · </textPath>
-    </text>
-  </svg>
-  <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:30px;color:var(--ink)">✶</div>
-</div>
+                function start() {
+                    qs = POOL.slice()
+                        .sort(function () {
+                            return Math.random() - 0.5;
+                        })
+                        .slice(0, N);
+                    i = 0;
+                    log = [];
+                    els.res.hidden = true;
+                    els.play.hidden = false;
+                    show();
+                }
+                function show() {
+                    locked = false;
+                    pick = null;
+                    els.prog.textContent = i + 1 + " / " + N;
+                    els.stmt.textContent = "“" + qs[i][0] + "”";
+                    els.fb.innerHTML = "";
+                    ansBtns.forEach(function (x) {
+                        x.classList.remove("on");
+                    });
+                    chipBtns.forEach(function (c) {
+                        c.disabled = true;
+                    });
+                }
+                function answer(conf) {
+                    if (locked || pick === null) return;
+                    locked = true;
+                    var q = qs[i],
+                        ok = pick === q[1];
+                    log.push({ p: conf, y: ok ? 1 : 0 });
+                    chipBtns.forEach(function (c) {
+                        c.disabled = true;
+                    });
+                    els.fb.innerHTML =
+                        (ok
+                            ? '<span class="ok">Correct.</span> '
+                            : '<span class="no">Nope, it’s ' +
+                              (q[1] ? "true" : "false") +
+                              ".</span> ") +
+                        q[2] +
+                        ' <button class="btn" type="button" id="g-next" style="margin-left:6px;padding:4px 10px">' +
+                        (i < N - 1 ? "Next →" : "See my calibration →") +
+                        "</button>";
+                    g("g-next").addEventListener("click", function () {
+                        i++;
+                        i < N ? show() : finish();
+                    });
+                    g("g-next").focus();
+                }
+                function finish() {
+                    var n = log.length,
+                        acc = 0,
+                        conf = 0,
+                        brier = 0;
+                    log.forEach(function (o) {
+                        acc += o.y;
+                        conf += o.p;
+                        brier += Math.pow(o.p - o.y, 2);
+                    });
+                    acc /= n;
+                    conf /= n;
+                    brier /= n;
+                    // ECE over 5 bins: [.5,.6) [.6,.7) [.7,.8) [.8,.9) [.9,1]
+                    var bins = [0, 1, 2, 3, 4].map(function () {
+                        return { n: 0, a: 0, c: 0 };
+                    });
+                    log.forEach(function (o) {
+                        var b = Math.min(
+                            4,
+                            Math.floor((o.p - 0.5) * 10 + 1e-9),
+                        );
+                        bins[b].n++;
+                        bins[b].a += o.y;
+                        bins[b].c += o.p;
+                    });
+                    var ece = 0;
+                    bins.forEach(function (b) {
+                        if (b.n)
+                            ece += (b.n / n) * Math.abs(b.a / b.n - b.c / b.n);
+                    });
+                    var gap = conf - acc,
+                        verdict;
+                    if (gap > 0.12)
+                        verdict =
+                            "Overconfident. You’d fit right in as a 3B model before SECL.";
+                    else if (gap < -0.12)
+                        verdict =
+                            "Underconfident. You know more than you admit.";
+                    else
+                        verdict =
+                            "Well calibrated. Honestly better than most LLMs.";
 
-<script>
-(function(){
-  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+                    // reliability plot: x = confidence (.5–1), y = accuracy (0–1)
+                    var W = 220,
+                        H = 200,
+                        P = 26;
+                    function X(c) {
+                        return P + ((c - 0.5) / 0.5) * (W - P - 6);
+                    }
+                    function Y(a) {
+                        return H - P - a * (H - P - 8);
+                    }
+                    var svg =
+                        '<svg viewBox="0 0 ' +
+                        W +
+                        " " +
+                        H +
+                        '" role="img" aria-label="Your reliability diagram">' +
+                        '<rect x="' +
+                        P +
+                        '" y="8" width="' +
+                        (W - P - 6) +
+                        '" height="' +
+                        (H - P - 8) +
+                        '" fill="none" stroke="currentColor" stroke-opacity=".25"/>' +
+                        '<line x1="' +
+                        X(0.5) +
+                        '" y1="' +
+                        Y(0.5) +
+                        '" x2="' +
+                        X(1) +
+                        '" y2="' +
+                        Y(1) +
+                        '" stroke="currentColor" stroke-dasharray="4 4" stroke-opacity=".6"/>';
+                    bins.forEach(function (b) {
+                        if (!b.n) return;
+                        var cx = X(b.c / b.n),
+                            cy = Y(b.a / b.n),
+                            r = 4 + b.n * 2;
+                        svg +=
+                            '<line x1="' +
+                            cx +
+                            '" y1="' +
+                            cy +
+                            '" x2="' +
+                            cx +
+                            '" y2="' +
+                            Y(b.c / b.n) +
+                            '" stroke="var(--accent)" stroke-width="2" stroke-opacity=".5"/>' +
+                            '<circle cx="' +
+                            cx +
+                            '" cy="' +
+                            cy +
+                            '" r="' +
+                            r +
+                            '" fill="var(--accent)" fill-opacity=".85"/>';
+                    });
+                    svg +=
+                        '<text x="' +
+                        (W / 2 + P / 2) +
+                        '" y="' +
+                        (H - 6) +
+                        '" font-family="Space Mono,monospace" font-size="9" text-anchor="middle" fill="currentColor" opacity=".7">your confidence →</text>' +
+                        '<text x="10" y="' +
+                        (H / 2 - 8) +
+                        '" font-family="Space Mono,monospace" font-size="9" text-anchor="middle" fill="currentColor" opacity=".7" transform="rotate(-90 10 ' +
+                        (H / 2 - 8) +
+                        ')">accuracy →</text></svg>';
 
-  /* preloader */
-  if(!reduce){
-    var pl=document.getElementById('preloader'),c=document.getElementById('pl-count'),bar=pl.querySelector('.pl-bar i'),n=0;
-    document.body.style.overflow='hidden';
-    var t=setInterval(function(){
-      n+=Math.random()*9+3;
-      if(n>=100){n=100;clearInterval(t);c.innerHTML='100<span class="pct">%</span>';bar.style.width='100%';
-        setTimeout(function(){pl.classList.add('done');document.body.style.overflow='';},420);}
-      else{c.innerHTML=Math.floor(n)+'<span class="pct">%</span>';bar.style.width=n+'%';}
-    },95);
-  }
-
-  /* reveal + stat count-up */
-  function countUp(el){
-    var to=parseFloat(el.dataset.to),suf=el.dataset.suf||'',dur=1100,s=performance.now();
-    function step(now){var p=Math.min((now-s)/dur,1);var e=1-Math.pow(1-p,3);
-      el.textContent=Math.round(to*e)+suf; if(p<1)requestAnimationFrame(step);}
-    requestAnimationFrame(step);
-  }
-  var io=new IntersectionObserver(function(es){es.forEach(function(e){
-    if(e.isIntersecting){e.target.classList.add('in');
-      var num=e.target.querySelector('.num[data-to]');
-      if(num&&!num.dataset.done){num.dataset.done=1; reduce?num.textContent=num.dataset.to+(num.dataset.suf||''):countUp(num);}
-      io.unobserve(e.target);}});},{threshold:.18});
-  document.querySelectorAll('.reveal').forEach(function(el){io.observe(el)});
-
-  /* reliability curve */
-  var curve=document.getElementById('curve'),label=document.getElementById('curve-label');
-  // y from accuracy (0..1) -> svg y (220 bottom .. 20 top); x conf 0..1 -> 40..300
-  function X(c){return 40+c*260}
-  function Y(a){return 220-a*200}
-  function pathFor(f){ // f=0 overconfident, f=1 calibrated
-    var pts=[],i;
-    for(i=0;i<=20;i++){var c=i/20;
-      var over=Math.max(0,c-0.32*Math.sin(Math.PI*c)); // bowed below diagonal
-      var a=over+(c-over)*f;
-      pts.push((i===0?'M':'L')+X(c).toFixed(1)+','+Y(a).toFixed(1));}
-    return pts.join(' ');
-  }
-  var rstate=0;
-  function animateCurve(target){
-    if(reduce){curve.setAttribute('d',pathFor(target));setLabel(target);return;}
-    var start=rstate,s=performance.now(),dur=1200;
-    function step(now){var p=Math.min((now-s)/dur,1),e=1-Math.pow(1-p,3);
-      var f=start+(target-start)*e; curve.setAttribute('d',pathFor(f)); rstate=f;
-      if(p<1)requestAnimationFrame(step); else setLabel(target);}
-    requestAnimationFrame(step);
-  }
-  function setLabel(f){label.textContent = f>0.5 ? 'After SECL · calibrated' : 'Overconfident model';
-    var col = f>0.5 ? 'var(--blue)' : 'var(--red)';
-    curve.setAttribute('stroke', col);
-    var sw=document.getElementById('curve-swatch'); if(sw)sw.style.background=col;}
-  curve.setAttribute('d',pathFor(0));
-  // run when diagram scrolls in
-  var dio=new IntersectionObserver(function(es){es.forEach(function(e){
-    if(e.isIntersecting){setTimeout(function(){animateCurve(1);},500);dio.unobserve(e.target);}});},{threshold:.4});
-  dio.observe(document.getElementById('relsvg'));
-  document.getElementById('recal').addEventListener('click',function(){
-    var target=rstate>0.5?0:1; animateCurve(target);
-  });
-
-  /* draggable sticker */
-  var st=document.getElementById('sticker'),dragging=false,ox,oy,px,py;
-  function down(e){dragging=true;st.classList.add('grabbing');
-    var p=e.touches?e.touches[0]:e; px=p.clientX;py=p.clientY;
-    var r=st.getBoundingClientRect(); ox=r.left; oy=r.top;
-    st.style.right='auto';st.style.bottom='auto';st.style.left=ox+'px';st.style.top=oy+'px';}
-  function move(e){if(!dragging)return; var p=e.touches?e.touches[0]:e;
-    st.style.left=(ox+p.clientX-px)+'px'; st.style.top=(oy+p.clientY-py)+'px'; e.preventDefault();}
-  function up(){dragging=false;st.classList.remove('grabbing');}
-  st.addEventListener('mousedown',down);window.addEventListener('mousemove',move);window.addEventListener('mouseup',up);
-  st.addEventListener('touchstart',down,{passive:false});window.addEventListener('touchmove',move,{passive:false});window.addEventListener('touchend',up);
-})();
-</script>
-</body>
+                    els.play.hidden = true;
+                    els.res.hidden = false;
+                    els.prog.textContent = "done";
+                    els.res.innerHTML =
+                        '<div class="result"><div>' +
+                        svg +
+                        "</div><div>" +
+                        '<div class="verdict">' +
+                        verdict +
+                        "</div>" +
+                        '<div class="kv"><span><b>' +
+                        Math.round(acc * 100) +
+                        "%</b>accuracy</span><span><b>" +
+                        Math.round(conf * 100) +
+                        "%</b>avg. confidence</span><span><b>" +
+                        ece.toFixed(3) +
+                        "</b>your ECE</span><span><b>" +
+                        brier.toFixed(3) +
+                        "</b>Brier</span></div>" +
+                        '<p class="muted" style="font-size:15px">For scale: Llama 3.2-3B has an ECE of 0.170 out of the box and 0.050 after SECL. Dots below the dashed line mean you were more confident than you were right. (Eight questions is a tiny sample, so the error bars here are huge.)</p>' +
+                        '<div class="cta"><button class="btn solid" type="button" id="g-again">Play again ↻</button><a class="btn" href="secl.html">How SECL fixes this for LLMs →</a></div>' +
+                        "</div></div>";
+                    g("g-again").addEventListener("click", start);
+                }
+                start();
+            })();
+        </script>
+    </body>
 </html>
